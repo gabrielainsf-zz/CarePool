@@ -76,7 +76,7 @@ def add_trip_process():
                     max_passengers=max_passengers,
                     origin=trip_origin,
                     destination=trip_destination,
-                    willing_to_stop=willing_to_stop
+                    willing_to_stop=willing_to_stop,
                     trip_cost=trip_cost,
                     user_id=user_id)
 

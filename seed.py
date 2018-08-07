@@ -77,7 +77,7 @@ def load_trips():
                         num_passengers = num_passengers,
                         origin=origin,
                         destination=destination,
-                        willing_to_stop=willing_to_stop
+                        willing_to_stop=willing_to_stop,
                         trip_cost=trip_cost,
                         user_id=user_id)
         else:
