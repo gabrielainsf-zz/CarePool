@@ -65,6 +65,22 @@ def add_trip():
 def add_trip_process():
     """Adds a trip to the database."""
 
+    trip_date = request.form["date"]
+    trip_origin = request.form["origin"]
+    trip_destination = request.form["destination"]
+    max_passengers = request.form["max_passengers"]
+    trip_cost = request.form["cost"]
+    willing_to_stop = request.form["newleg"]
+
+    new_trip = Trip(date_of_trip=date_trip_str,
+                    max_passengers=max_passengers,
+                    origin=trip_origin,
+                    destination=trip_destination,
+                    willing_to_stop=willing_to_stop
+                    trip_cost=trip_cost,
+                    user_id=user_id)
+
+
     return redirect('/rides')
 
 

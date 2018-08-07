@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% content block %}
+    
+    <h3>Add a ride</h3>
+    <form action="/add-ride" method=POST>
+        Date of trip: <input type="text" name="date"><br>
+        Where does your trip begin? <input type="text" name="origin"><br>
+        What is your destination? <input type="text" name="destination"><br>
+        How many passengers would you like to take? <input type="text" name="max_passengers"><br>
+        Are you willing to pick up or drop off along the way? <input type="text" name="newleg"><br>
+        How much should your passengers chip in? <input type="text" name="cost"><br>
+        <input type="submit">
+    </form>
+
+{% endblock %}
