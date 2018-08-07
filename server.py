@@ -22,7 +22,11 @@ app.jinja_env.undefined = StrictUndefined
 def index():
     """Display Homepage."""
 
-    return render_template('homepage.html')
+    user_id = session['user_id']
+
+    upcoming_trips = Trip.query.filter(Trip.user_id == user_id).all()
+
+    return render_template('homepage.html', upcoming_trips=upcoming_trips)
 
 @app.route('/login')
 def display_login_form():
@@ -45,16 +49,10 @@ def login_process():
     if user_by_email is None:
         flash('Oops! You need to register first.')
     elif email == user_by_email.email and password == user_by_email.password:
-        session['user_id'] = user_id
+        session['user_id'] = user.user_id
         flash('Yay! You are logged in.')
 
     return redirect('/')
-
-@app.route('/rides')
-def display_trips():
-    """Display trips/rides available."""
-
-    return render_template('rides.html')
 
 @app.route('/add-ride')
 def add_trip():
@@ -71,8 +69,9 @@ def add_trip_process():
     max_passengers = request.form["max_passengers"]
     trip_cost = request.form["cost"]
     willing_to_stop = request.form["newleg"]
+    user_id = session['user_id']
 
-    new_trip = Trip(date_of_trip=date_trip_str,
+    new_trip = Trip(date_of_trip=trip_date,
                     max_passengers=max_passengers,
                     origin=trip_origin,
                     destination=trip_destination,
@@ -80,8 +79,68 @@ def add_trip_process():
                     trip_cost=trip_cost,
                     user_id=user_id)
 
+    db.session.add(new_trip)
+    db.session.commit()
 
-    return redirect('/rides')
+    return redirect('/')
+
+@app.route('/search-rides')
+def search_rides_form():
+
+    return render_template('search_form.html')
+
+@app.route('/search-rides', methods=["POST"])
+def search_rides():
+
+    user_id = session.get('user_id')
+
+    # Data from form
+    origin = request.form['origin']
+    destination = request.form['destination']
+
+    # Data from query
+    trips = Trip.query.filter(Trip.origin == origin, Trip.destination == destination).all()
+    
+    if trips is None:
+        flash("Sorry, no rides were found. Would you like to try another search?")
+        return redirect('/search-rides')
+    else:
+        return render_template('search_results.html', trips=trips, origin=origin, destination=destination)
+
+@app.route('/request-ride', methods=["POST"])
+def create_user_trip():
+
+    trip_id = request.form['trip']
+    user_id = session.get('user_id')
+
+    trip = Trip.query.filter(Trip.trip_id == trip_id).one()
+
+    # Ensure there is still space before adding to current passengers
+    if trip.num_passengers < trip.max_passengers:
+        
+        # Increment number of passengers in ride
+        trip.num_passengers += 1
+
+        # Instantiate new UserTrip obj
+        new_user_trip = UserTrip(trip_id=trip_id,
+                             user_id=user_id)
+
+        db.session.add(new_user_trip)
+        db.session.commit()
+        flash("Ride requested!")
+        return redirect('/')
+    else:
+        flash("Sorry, ride is already full!")
+
+# @app.route('/update-ride')
+# def update_trip():
+
+#     return render_template('edit_ride.html')
+
+# @app.route('/update-ride', methods=["POST"])
+# def update_trip_process():
+
+#     return redirect('/')
 
 
 
@@ -91,7 +150,7 @@ def add_trip_process():
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
-    app.debug = True
+    app.debug = False
     # make sure templates, etc. are not cached in debug mode
     app.jinja_env.auto_reload = app.debug
 

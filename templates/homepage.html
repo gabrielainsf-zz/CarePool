@@ -2,6 +2,18 @@
 
 {% block content %}
 
-<h3>Welcome!</h3>
+<h1>Welcome!</h1>
+
+<h2>Your upcoming rides:</h2>
+
+{% for trip in upcoming_trips %}
+    
+    Date: {{ trip.date_of_trip }} <br>
+    Starting: {{ trip.origin }} <br>
+    Ending: {{ trip.destination }} <br>
+    Current passengers: {{ trip.num_passengers }} <br>
+    Max passengers: {{ trip.max_passengers }} <br><br><br>
+
+{% endfor %}
 
 {% endblock %}

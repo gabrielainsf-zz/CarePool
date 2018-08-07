@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <form action="/search-rides" method=POST>
+        Starting: <input type="text" name="origin"><br>
+        Ending: <input type="text" name="destination"><br>
+        <input type="submit">
+    </form>
+
+{% endblock %}

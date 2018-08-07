@@ -125,6 +125,16 @@ def set_val_user_id():
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
 
+def set_val_trip_id():
+    """Set value for the next trip after seeding db"""
+
+    result = db.session.query(func.max(Trip.trip_id)).one()
+    max_id = int(result[0])
+
+    query = "SELECT setval('trips_trip_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
 
 if __name__ == "__main__":
     connect_to_db(app)
@@ -132,9 +142,8 @@ if __name__ == "__main__":
     # In case tables haven't been created, create them
     db.create_all()
 
-    # Import different types of data
-
-    # Commenting out so we don't continue to accidentally seed db
     load_users()
     load_trips()
     load_usertrips()
+    set_val_trip_id()
+    set_val_user_id()
