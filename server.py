@@ -1,6 +1,8 @@
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, redirect, request, flash, session
+# from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
+# import flask_login
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Trip, UserTrip
@@ -8,6 +10,13 @@ from model import connect_to_db, db, User, Trip, UserTrip
 
 
 app = Flask(__name__)
+# login = LoginManager(app)
+
+
+# Image uploads
+# photos = UploadSet('photos', IMAGES)
+# app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
+# configure_uploads(app, photos)
 
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
@@ -28,10 +37,37 @@ def index():
 
     return render_template('homepage.html', upcoming_trips=upcoming_trips)
 
+############# Flask-Login attempt ##########
+
+# @login.user_loader
+# def load_user():
+    
+#     return User.query.get(user_id)
+
+
+# @app.route('/login', methods=["GET, POST"])
+# def login():
+#     form = LoginForm()
+
+#     if form.validate_on_submit():
+#         user = User.query.get(form.email.data)
+#         if user:
+#             if bcrypt.check_password_hash(user.password, form.password.data):
+#                 user.authenticated = True
+#                 db.session.add(user)
+#                 db.session.commit()
+#                 login_user(user, remember=True)
+#                 return redirect('/')
+
+#     return render_template("login_form.html", form=form)
+
+#############################
+
 @app.route('/login')
 def display_login_form():
 
     return render_template('login_form.html')
+
 
 @app.route('/login', methods=["POST"])
 def login_process():
@@ -49,7 +85,7 @@ def login_process():
     if user_by_email is None:
         flash('Oops! You need to register first.')
     elif email == user_by_email.email and password == user_by_email.password:
-        session['user_id'] = user.user_id
+        session['user_id'] = user_id
         flash('Yay! You are logged in.')
 
     return redirect('/')
@@ -63,12 +99,12 @@ def add_trip():
 def add_trip_process():
     """Adds a trip to the database."""
 
-    trip_date = request.form["date"]
-    trip_origin = request.form["origin"]
-    trip_destination = request.form["destination"]
-    max_passengers = request.form["max_passengers"]
-    trip_cost = request.form["cost"]
-    willing_to_stop = request.form["newleg"]
+    trip_date = request.form['date']
+    trip_origin = request.form['origin']
+    trip_destination = request.form['destination']
+    max_passengers = request.form['max_passengers']
+    trip_cost = request.form['cost']
+    willing_to_stop = request.form['newleg']
     user_id = session['user_id']
 
     new_trip = Trip(date_of_trip=trip_date,
@@ -89,6 +125,7 @@ def search_rides_form():
 
     return render_template('search_form.html')
 
+
 @app.route('/search-rides', methods=["POST"])
 def search_rides():
 
@@ -106,6 +143,7 @@ def search_rides():
         return redirect('/search-rides')
     else:
         return render_template('search_results.html', trips=trips, origin=origin, destination=destination)
+
 
 @app.route('/request-ride', methods=["POST"])
 def create_user_trip():
@@ -132,17 +170,42 @@ def create_user_trip():
     else:
         flash("Sorry, ride is already full!")
 
-# @app.route('/update-ride')
-# def update_trip():
+@app.route('/update-ride')
+def update_trip():
 
-#     return render_template('edit_ride.html')
+    return render_template('update_ride.html')
 
-# @app.route('/update-ride', methods=["POST"])
-# def update_trip_process():
+@app.route('/update-ride', methods=["POST"])
+def update_trip_process():
 
-#     return redirect('/')
+    trip_id = request.form['trip']
+
+    # Data from form
+    trip_date = request.form['date']
+    trip_origin = request.form['origin']
+    trip_destination = request.form['destination']
+    max_passengers = request.form['max_passengers']
+    trip_cost = request.form['cost']
+    willing_to_stop = request.form['newleg']
 
 
+    # Data from query
+    trip = Trip.query.filter(Trip.trip_id == trip_id)
+
+    # Update row
+    # Write in conditionals, check if there is data returned or Null value to update
+
+
+    return redirect('/')
+
+@app.route('/logout')
+def logout():
+    """Log user out."""
+
+    del session['user_id']
+    flash('Logged out!')
+
+    return redirect('/')
 
 
 

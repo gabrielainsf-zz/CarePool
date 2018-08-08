@@ -6,12 +6,14 @@
 
     {% for trip in trips %}
     
-       Date: {{ trip.date_of_trip }} <br>
-       Driver: {{ trip.user.fname }} <br>
+        Date: {{ trip.date_of_trip }} <br>
+        Driver: {{ trip.user.fname }} <br>
 
-       <form action="/request-ride" method="POST">
-        <input type="submit" value="Request ride!">
-        <input type="hidden" value={{ trip.trip_id }} name="trip">
+        <img src={{ trip.user.user_profile_img }}>
+
+        <form action="/request-ride" method="POST">
+            <input type="submit" value="Request ride!">
+            <input type="hidden" value={{ trip.trip_id }} name="trip">
         </form>
 
     {% endfor %}

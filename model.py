@@ -1,6 +1,7 @@
 """Models and database functions for Rideshare project."""
 
 from flask_sqlalchemy import SQLAlchemy
+# from server import login
 
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
@@ -21,7 +22,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(64), nullable=True)
     password = db.Column(db.String(64), nullable=True)
-
+    # authenticated = db.Column(db.Boolean, default=False)
 
     # Profile information
     fname = db.Column(db.String(20), nullable=False)
@@ -31,12 +32,27 @@ class User(db.Model):
     user_profile_img = db.Column(db.String(250), nullable=False)
     user_social_media = db.Column(db.String(3000), nullable=False)
 
+    # # Flask-Login attributes
+    # def is_active(self):
+    #     """True, as all users are active."""
+    #     return True
 
-    def __repr__(self):
-        """Provide helpful representation when printed."""
+    # def get_id(self):
+    #     """Return the email address to satisfy Flask-Login's requirements."""
+    #     return self.email
 
-        return f"<User user_id={self.user_id} email={self.email}>"
+    # def is_authenticated(self):
+    #     """Return True if the user is authenticated."""
+    #     return self.authenticated
 
+    # def is_anonymous(self):
+    #     """False, as anonymous users aren't supported."""
+    #     return False
+
+    # def __repr__(self):
+    #     """Provide helpful representation when printed."""
+
+    #     return f"<User user_id={self.user_id} email={self.email}>"
 
 
 class Trip(db.Model):
@@ -49,7 +65,7 @@ class Trip(db.Model):
     date_of_trip = db.Column(db.DateTime, nullable=False)
     max_passengers = db.Column(db.Integer, nullable=False)
     num_passengers = db.Column(db.Integer, nullable=False, default=0)
-    willing_to_stop = db.Column(db.String(64), nullable=False)
+    willing_to_stop = db.Column(db.Boolean, nullable=False)
     trip_cost = db.Column(db.Integer, nullable=False)
 
     # User as Driver

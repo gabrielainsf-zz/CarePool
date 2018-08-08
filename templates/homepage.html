@@ -12,8 +12,15 @@
     Starting: {{ trip.origin }} <br>
     Ending: {{ trip.destination }} <br>
     Current passengers: {{ trip.num_passengers }} <br>
-    Max passengers: {{ trip.max_passengers }} <br><br><br>
+    Max passengers: {{ trip.max_passengers }} 
 
+    {% if trip.num_passengers == 0 %}
+        <form action="/update-ride" method="get">
+            <input type="submit" value="Update ride">
+            <input type="hidden" value={{ trip.trip_id }} name="trip">
+        </form>
+    {% endif %}
+    <br><br><br>
 {% endfor %}
 
 {% endblock %}
