@@ -103,15 +103,26 @@ class UserTrip(db.Model):
 ##############################################################################
 # Helper functions
 
-def connect_to_db(app):
+def connect_to_db(app, db_uri="postgresql:///rideshares"):
     """Connect the database to our Flask app."""
 
     # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///rideshares'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
 
+def example_data():
+    user = User(fname="Jo",
+                lname="Bama",
+                email="jo@bama.com",
+                user_bio="Friendly person",
+                user_gender="Female",
+                password="jo@bama.com",
+                user_profile_img="https://robohash.org/enimsolutaqui.png?size=50x50&set=set1",
+                user_social_media="twitter.com")
+    db.session.add(user)
+    db.session.commit()
 
 if __name__ == "__main__":
     # As a convenience, if we run this module interactively, it will leave
