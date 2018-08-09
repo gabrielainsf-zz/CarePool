@@ -2,6 +2,7 @@ from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Trip, UserTrip
+import requests
 # from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 # import flask_login
 
@@ -135,6 +136,13 @@ def add_trip_process():
     db.session.commit()
 
     return redirect('/')
+
+#######
+# @app.route('/autocomplete')
+# def autocomplete_search():
+
+#     return render_template('googleplaces.html')
+######
 
 @app.route('/search-rides')
 def search_rides_form():
