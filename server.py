@@ -3,6 +3,7 @@ from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Trip, UserTrip
 import requests
+import os
 # from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 # import flask_login
 
@@ -149,9 +150,11 @@ def search_rides_form():
 
     user_id = session.get('user_id')
 
+    key = os.environ['GOOGLE_PLACES_KEY']
+
     # If user is in session
     if user_id:
-        return render_template('search_form.html')
+        return render_template('search_form.html', key=key)
     else:
         flash("You need to be logged in to do that.")
         return redirect('/login')
@@ -164,11 +167,15 @@ def search_rides():
     origin = request.form['origin']
     destination = request.form['destination']
 
+    print(origin)
+    print(type(origin))
+
     # Data from query
     trips = Trip.query.filter(Trip.origin == origin,
                               Trip.destination == destination).all()
-
-    if trips is None:
+    print("\n\nTRIPS")
+    print(trips)
+    if not trips:
         flash("Sorry, no rides were found. Would you like to try another search?")
         return redirect('/search-rides')
     else:
