@@ -65,7 +65,7 @@ class Trip(db.Model):
     date_of_trip = db.Column(db.DateTime, nullable=False)
     max_passengers = db.Column(db.Integer, nullable=False)
     num_passengers = db.Column(db.Integer, nullable=False, default=0)
-    willing_to_stop = db.Column(db.String(5), nullable=False)
+    willing_to_stop = db.Column(db.Boolean, nullable=False)
     trip_cost = db.Column(db.Integer, nullable=False)
 
     # User as Driver

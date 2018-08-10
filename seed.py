@@ -64,7 +64,7 @@ def load_trips():
         destination = row_list[2]
         date_trip_str = row_list[3]
         # date_trip = datetime.strptime(date_trip_str, "%d-%d-%Y")
-        willing_to_stop = row_list[4]
+        willing_to_stop = row_list[4] == 'true'
         max_passengers = row_list[5]
         num_passengers = 2
         trip_cost = 15
@@ -77,7 +77,7 @@ def load_trips():
                         num_passengers = num_passengers,
                         origin=origin,
                         destination=destination,
-                        willing_to_stop=bool(willing_to_stop),
+                        willing_to_stop=(willing_to_stop),
                         trip_cost=trip_cost,
                         user_id=user_id)
         else:

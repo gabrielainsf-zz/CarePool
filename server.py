@@ -122,7 +122,7 @@ def add_trip_process():
     trip_destination = request.form['destination']
     max_passengers = request.form['max_passengers']
     trip_cost = request.form['cost']
-    willing_to_stop = request.form['newleg']
+    willing_to_stop = request.form['newleg'] in ('True') 
     user_id = session['user_id']
 
     new_trip = Trip(date_of_trip=trip_date,
