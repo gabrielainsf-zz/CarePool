@@ -62,7 +62,7 @@ class Trip(db.Model):
 
 
     trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    date_of_trip = db.Column(db.DateTime, nullable=False)
+    date_of_trip = db.Column(db.String(20), nullable=False)
     max_passengers = db.Column(db.Integer, nullable=False)
     num_passengers = db.Column(db.Integer, nullable=False, default=0)
     willing_to_stop = db.Column(db.Boolean, nullable=False)

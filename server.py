@@ -1,16 +1,16 @@
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, json, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Trip, UserTrip
+from datetime import datetime
+from googlemaps import convert
+from googlemaps.convert import as_list
 import requests
 import os
+
 # from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
-# import flask_login
-
-
 
 app = Flask(__name__)
-# login = LoginManager(app)
 
 
 # Image uploads
@@ -21,12 +21,15 @@ app = Flask(__name__)
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
 
+# Google Place key
+googlePlaceKey = os.environ['GOOGLE_PLACES_KEY']
+
 # Normally, if you use an undefined variable in Jinja2, it fails
 # silently. This is horrible. Fix this so that, instead, it raises an
 # error.
 app.jinja_env.undefined = StrictUndefined
 
-
+    
 @app.route('/')
 def index():
     """Display Homepage."""
@@ -40,31 +43,6 @@ def index():
         flash("Oops! You need to log in.")
         return render_template('login_form.html')
 
-############# Flask-Login attempt ##########
-
-# @login.user_loader
-# def load_user():
-    
-#     return User.query.get(user_id)
-
-
-# @app.route('/login', methods=["GET, POST"])
-# def login():
-#     form = LoginForm()
-
-#     if form.validate_on_submit():
-#         user = User.query.get(form.email.data)
-#         if user:
-#             if bcrypt.check_password_hash(user.password, form.password.data):
-#                 user.authenticated = True
-#                 db.session.add(user)
-#                 db.session.commit()
-#                 login_user(user, remember=True)
-#                 return redirect('/')
-
-#     return render_template("login_form.html", form=form)
-
-#############################
 
 @app.route('/login')
 def display_login_form():
@@ -108,7 +86,7 @@ def add_trip():
     user_id = session.get('user_id')
 
     if user_id:
-        return render_template('add_ride.html')
+        return render_template('add_ride.html', key=googlePlaceKey)
     else:
         flash("You need to be logged in to do that.")
         return redirect('/login')
@@ -138,23 +116,15 @@ def add_trip_process():
 
     return redirect('/')
 
-#######
-# @app.route('/autocomplete')
-# def autocomplete_search():
-
-#     return render_template('googleplaces.html')
-######
 
 @app.route('/search-rides')
 def search_rides_form():
 
     user_id = session.get('user_id')
 
-    key = os.environ['GOOGLE_PLACES_KEY']
-
     # If user is in session
     if user_id:
-        return render_template('search_form.html', key=key)
+        return render_template('search_form.html', key=googlePlaceKey)
     else:
         flash("You need to be logged in to do that.")
         return redirect('/login')
@@ -166,15 +136,37 @@ def search_rides():
     # Data from form
     origin = request.form['origin']
     destination = request.form['destination']
-
-    print(origin)
-    print(type(origin))
+    date = request.form['date']
+    date_obj = datetime.strptime(date, "%m/%d/%Y")
 
     # Data from query
     trips = Trip.query.filter(Trip.origin == origin,
                               Trip.destination == destination).all()
-    print("\n\nTRIPS")
-    print(trips)
+
+    ## TODO: 
+    ## if not trips:
+    ## search other rides to that destination from same origin
+    ## if there is a ride going on another day, display results
+
+    ## Filter query through origin only, then use if statement in jinja
+    ## Perhaps pass in distance variable calculated w google distance?
+    base_url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
+    origins = origin
+    destinations = destination
+    payload = {
+        "origins": convert.location_list(origins),
+        "destinations": convert.location_list(destinations)
+    }
+
+    r = requests.get(base_url, params = payload)
+
+    x = json.loads(r.text)
+
+    distance = x['rows'][0]['elements'][0]['distance']['text']
+   
+    print(distance)
+
+
     if not trips:
         flash("Sorry, no rides were found. Would you like to try another search?")
         return redirect('/search-rides')
@@ -182,8 +174,9 @@ def search_rides():
         return render_template('search_results.html',
                                 trips=trips,
                                 origin=origin,
-                                destination=destination)
-
+                                destination=destination,
+                                date=date,
+                                date_obj=date_obj)
 
 
 @app.route('/request-ride', methods=["POST"])

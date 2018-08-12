@@ -2,21 +2,23 @@
 
 {% block content %}
 
-    <h2>Available rides from {{ origin }} to {{ destination }}:</h2>
+  <h2>Available rides from {{ origin }} to {{ destination }} on {{ date }} :</h2>
 
-    {% for trip in trips %}
-    
-        Date: {{ trip.date_of_trip }} <br>
-        Driver: {{ trip.user.fname }} <br>
 
-        <img src={{ trip.user.user_profile_img }}>
+  {% for trip in trips %}
+    {% if date == trip.date_of_trip %}
 
-        <form action="/request-ride" method="POST">
-            <input type="submit" value="Request ride!">
-            <input type="hidden" value={{ trip.trip_id }} name="trip">
-        </form>
+      Date: {{ trip.date_of_trip }} <br>
+      Driver: {{ trip.user.fname }} <br>
 
-    {% endfor %}
-  
+    <img src={{ trip.user.user_profile_img }}>
+
+    <form action="/request-ride" method="POST">
+      <input type="submit" value="Request ride!">
+      <input type="hidden" value={{ trip.trip_id }} name="trip">
+    </form>
+    {% endif %}
+  {% endfor %}
+
 
 {% endblock %}

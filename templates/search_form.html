@@ -1,75 +1,27 @@
 {% extends 'base.html' %}
-    
-    {% block content %}
 
-    <head>
+  {% block head %}
     <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-    <script src="https://maps.googleapis.com/maps/api/js?key={{ key }}&v=3.exp&sensor=false&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ key }}&v=3.exp&libraries=places"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script>
 
-      // ORIGINAL CODE
-      /**  var autocomplete;
-        function initialize() {
-          autocomplete = new google.maps.places.Autocomplete(
-             (document.getElementById('origin')),
-              // Only allow city searches in the U.S.
-              { types: ['(cities)'],
-                componentRestrictions: {country: "us"}
-              });
-          google.maps.event.addListener(autocomplete, 'place_changed', function() {
-          });
-        }
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
-        var autocomplete_destination;
-        function initialize2() {
-          autocomplete_destination = new google.maps.places.Autocomplete(
-              @type {HTMLInputElement} (document.getElementById('destination')),
-              // Only allow city searches in the U.S.
-              { types: ['(cities)'],
-                componentRestrictions: {country: "us"}
-              });
-          google.maps.event.addListener(autocomplete_destination, 'place_changed', function() {
-          });
-        } */
-
-        // REFACTORED CODE
-        let inputs = document.getElementsByClassName('query');
-
-        let options = {
-            types: ['(cities)'],
-            componentRestrictions: {country: "us"}
-        }; 
-
-        function initialize() {
-            for (let i = 0; i < inputs.length; i++) {
-
-                // Instantiate Autocomplete object for each input
-                let autocomplete = new google.maps.places.Autocomplete(inputs[i], options);
-                google.maps.event.addListener(autocomplete, 'place_changed', function() {
-                });
-            }
-
-            // Prevent auto-submit on first 'enter' click
-            $('.query').keydown(function (e) {
-              if (e.which == 13 && $('.pac-container:visible').length)
-                return false;
-            });
-        }
-
-  </script>
-    </head>
-
+    <script src="/static/searchCity.js"></script>
+    <script src="/static/datePicker.js"></script>
+  {% endblock %}
+    
+  {% block content %}
     <body onload="initialize()">
-        <div id="locationField">
-            <form action="/search-rides" method=POST>
-                <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting location"> 
-                <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination">
-                <input type="submit">
-            </form>
-        </div>
+      <div id="locationField">
+        <form action="/search-rides" method=POST>
+          <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting location"> 
+          <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination">
+          <input id="datepicker" type="text" name="date" placeholder="date">
+          <input type="submit">
+        </form>
+      </div>
     </body>
-
-
-
-    {% endblock %}
+  {% endblock %}

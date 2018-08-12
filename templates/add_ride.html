@@ -1,18 +1,41 @@
 {% extends 'base.html' %}
 
-{% block content %}
-    
-    <h3>Add a ride</h3>
-    <form action="/add-ride" method=POST>
-        Date of trip: <input type="text" name="date"><br>
-        Where does your trip begin? <input type="text" name="origin"><br>
-        What is your destination? <input type="text" name="destination"><br>
-        How many passengers would you like to take? <input type="text" name="max_passengers"><br>
-        Are you willing to pick up or drop off along the way?
-            <input type="radio" name="newleg" value="True">Yes 
-            <input type="radio" name="newleg" value="False">No<br> 
-        How much should each passenger chip in? <input type="text" name="cost"><br>
-        <input type="submit">
-    </form>
+  {% block head %}
+      <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+      <script src="https://maps.googleapis.com/maps/api/js?key={{ key }}&v=3.exp&libraries=places"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-{% endblock %}
+      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+      <script src="/static/searchCity.js"></script>
+      <script src="/static/datePicker.js"></script>
+  {% endblock %}
+
+
+
+
+  {% block content %}
+    <h3>Add a ride</h3>
+    <body onload="initialize()">
+      <form action="/add-ride" method=POST>
+        
+        Date of trip: 
+          <input id="datepicker" type="text" name="date"><br>
+        Where does your trip begin? 
+          <input type="text" name="origin" class="query"><br>
+        What is your destination?
+          <input type="text" name="destination" class="query"><br>
+        How many passengers would you like to take?
+          <input type="text" name="max_passengers"><br>
+        Are you willing to pick up or drop off along the way?
+          <input type="radio" name="newleg" value="True">Yes 
+          <input type="radio" name="newleg" value="False">No<br> 
+        How much should each passenger chip in? 
+          <input type="text" name="cost"><br>
+
+        <input type="submit">
+      </form>
+    </body>
+    {% endblock %}

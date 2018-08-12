@@ -5,7 +5,6 @@ from model import connect_to_db, db
 from model import User, Trip
 from model import UserTrip
 from server import app
-from datetime import datetime
 from random import choice
 
 def load_users():
@@ -63,7 +62,6 @@ def load_trips():
         origin = row_list[1]
         destination = row_list[2]
         date_trip_str = row_list[3]
-        # date_trip = datetime.strptime(date_trip_str, "%d-%d-%Y")
         willing_to_stop = row_list[4] == 'true'
         max_passengers = row_list[5]
         num_passengers = 2
