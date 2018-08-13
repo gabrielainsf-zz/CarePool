@@ -15,13 +15,15 @@
     
   {% block content %}
     <body onload="initialize()">
+
       <div id="locationField">
-        <form action="/search-rides" method=POST>
+        <form action="/search-rides" class="form-group" method=POST>
           <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting location"> 
           <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination">
           <input id="datepicker" type="text" name="date" placeholder="date">
           <input type="submit">
         </form>
       </div>
+      
     </body>
   {% endblock %}

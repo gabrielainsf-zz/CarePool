@@ -142,8 +142,6 @@ def search_rides():
     date = request.form['date']
     date_obj = datetime.strptime(date, "%m/%d/%Y").date()
 
-    print(date)
-    print(date_obj)
     # Data from query - list of trips from origin
     trips = Trip.query.filter(Trip.origin == origin).all()
 
@@ -190,7 +188,7 @@ def search_rides():
         kms = ' '.join(kilometers)
      
         if float(kms) < 50:
-            print(distance)
+            print(distance[1])
 
     if not trips:
         flash("Sorry, no rides were found. Would you like to try another search?")
