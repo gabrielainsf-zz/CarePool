@@ -4,5 +4,5 @@
 // } );
 
 $( function() {
-  $( "#datepicker" ).datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+  $( "#datepicker" ).datepicker('option', 'dateFormat', 'yy-mm-dd');
 } );

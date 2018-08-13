@@ -4,36 +4,57 @@
 
 <h1>Welcome!</h1>
 
-<h2>Your upcoming rides:</h2>
-{{ today }} 
-
-<br>
+<h2>Your trip today:</h2>
 {% for trip in trips %}
-
   {% if trip.date_of_trip == today %}
-    <h2>Your trip today:</h2>
+
       Date: {{ trip.date_of_trip }} <br>
       Starting: {{ trip.origin }} <br>
       Ending: {{ trip.destination }} <br>
       Current passengers: {{ trip.num_passengers }} <br>
       Max passengers: {{ trip.max_passengers }} 
-  {% endif %}
 
-  {% if trip.date_of_trip < today %}  
-    Date: {{ trip.date_of_trip }} <br>
-    Started: {{ trip.origin }} <br>
-    Ended: {{ trip.destination }} <br>
-  {% endif %}
-    <br><br><br>
-
-
-  {% if trip.num_passengers == 0 %}
-    <form action="/update-ride" method="POST">
+    {% if trip.num_passengers == 0 %}
+      <form action="/update-ride" method="POST">
         <input type="submit" value="Update ride">
         <input type="hidden" value={{ trip.trip_id }} name="trip">
-    </form>
+      </form>
+    {% endif %}
+
   {% endif %}
-  
 {% endfor %}
+
+<h2>Upcoming trips:</h2>
+{% for trip in trips %}
+  {% if trip.date_of_trip > today %}
+
+      Date: {{ trip.date_of_trip }} <br>
+      Starting: {{ trip.origin }} <br>
+      Ending: {{ trip.destination }} <br>
+      Current passengers: {{ trip.num_passengers }} <br>
+      Max passengers: {{ trip.max_passengers }} 
+
+    {% if trip.num_passengers == 0 %}
+      <form action="/update-ride" method="POST">
+        <input type="submit" value="Update ride">
+        <input type="hidden" value={{ trip.trip_id }} name="trip">
+      </form>
+    {% endif %}
+
+  {% endif %}
+{% endfor %}
+
+<h2> Previous trips: </h2>
+{% for trip in trips %}
+  {% if trip.date_of_trip < today %} 
+
+    Date: {{ trip.date_of_trip }} <br>
+    Started: {{ trip.origin }} <br>
+    Ended: {{ trip.destination }} <br><br>
+
+  {% endif %}
+{% endfor %}
+
+
 
 {% endblock %}
