@@ -32,28 +32,6 @@ class User(db.Model):
     user_profile_img = db.Column(db.String(250), nullable=False)
     user_social_media = db.Column(db.String(3000), nullable=False)
 
-    # # Flask-Login attributes
-    # def is_active(self):
-    #     """True, as all users are active."""
-    #     return True
-
-    # def get_id(self):
-    #     """Return the email address to satisfy Flask-Login's requirements."""
-    #     return self.email
-
-    # def is_authenticated(self):
-    #     """Return True if the user is authenticated."""
-    #     return self.authenticated
-
-    # def is_anonymous(self):
-    #     """False, as anonymous users aren't supported."""
-    #     return False
-
-    # def __repr__(self):
-    #     """Provide helpful representation when printed."""
-
-    #     return f"<User user_id={self.user_id} email={self.email}>"
-
 
 class Trip(db.Model):
     """Trip information."""
@@ -62,7 +40,7 @@ class Trip(db.Model):
 
 
     trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    date_of_trip = db.Column(db.String(20), nullable=False)
+    date_of_trip = db.Column(db.Date, nullable=False)
     max_passengers = db.Column(db.Integer, nullable=False)
     num_passengers = db.Column(db.Integer, nullable=False, default=0)
     willing_to_stop = db.Column(db.Boolean, nullable=False)

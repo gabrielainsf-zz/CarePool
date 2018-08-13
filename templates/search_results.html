@@ -4,21 +4,19 @@
 
   <h2>Available rides from {{ origin }} to {{ destination }} on {{ date }} :</h2>
 
-
   {% for trip in trips %}
-    {% if date == trip.date_of_trip %}
+    {% if ((date_obj == trip.date_of_trip) and (destination == trip.destination)) %}
 
       Date: {{ trip.date_of_trip }} <br>
       Driver: {{ trip.user.fname }} <br>
 
-    <img src={{ trip.user.user_profile_img }}>
+      <img src={{ trip.user.user_profile_img }}>
 
-    <form action="/request-ride" method="POST">
-      <input type="submit" value="Request ride!">
-      <input type="hidden" value={{ trip.trip_id }} name="trip">
-    </form>
+      <form action="/join-ride" method="POST">
+        <input type="submit" value="Join ride!">
+        <input type="hidden" value={{ trip.trip_id }} name="trip">
+      </form>
     {% endif %}
   {% endfor %}
-
 
 {% endblock %}
