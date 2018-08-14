@@ -146,54 +146,72 @@ def search_rides():
     # Data from query - list of trips from origin
     trips = Trip.query.filter(Trip.origin == origin).all()
 
+    # Query for origin and destination, if none, then nearby trips
+
     drop_offs = []
     for trip in trips:
-        drop_offs.append(tuple([trip.trip_id, trip.destination]))
-        # ERROR: ValueError: could not convert string to float: 'Los Angeles, CA, USA'
-        # I think it's looping through the list of tuples... look into this!
+        drop_offs.append(trip.destination)
 
     # Google Distance Matrix API set up
-    # base_url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
-    # origins = destination
-    # destinations = drop_offs[1]
-    # payload = {
-    #     "origins": convert.location_list(origins),
-    #     "destinations": convert.location_list(destinations)
-    # }
+    base_url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
+    origins = destination
+    destinations = drop_offs
+    payload = {
+        "origins": convert.location_list(origins),
+        "destinations": convert.location_list(destinations)
+    }
 
-    # r = requests.get(base_url, params = payload)
+    r = requests.get(base_url, params = payload)
 
     # Will be a list of tuples with possible drop-off and distance from desired
     # destination
-    drop_off_distances = [];
+    drop_off_distances = {};
 
     # Check the HTTP status code returned by the server. Only process the response, 
     # if the status code is 200 (OK in HTTP terms).
-    # if r.status_code != 200:
-    #     print('HTTP status code {} received, program terminated.'.format(r.status_code))
-    # else:
-    #     x = json.loads(r.text)
-    #     for isrc, src in enumerate(x['origin_addresses']):
-    #         for idst, dst in enumerate(x['destination_addresses']):
-    #             row = x['rows'][isrc]
-    #             cell = row['elements'][idst]
-    #             if cell['status'] == 'OK':
-    #                 drop_off_distances.append(tuple((dst, cell['distance']['text'])))
-    #                 print('{} to {}: {}.'.format(src, dst, cell['distance']['text']))
-    #             else:
-    #                 print('{} to {}: status = {}'.format(src, dst, cell['status']))
+    if r.status_code != 200:
+        print('HTTP status code {} received, program terminated.'.format(r.status_code))
+    else:
+        x = json.loads(r.text)
+        for isrc, src in enumerate(x['origin_addresses']):
+            for idst, dst in enumerate(x['destination_addresses']):
+                row = x['rows'][isrc]
+                cell = row['elements'][idst]
+                if cell['status'] == 'OK':
+                    # Dictionary of drop off distances to key in by city
+                    drop_off_distances[dst] = cell['distance']['text']
+                    # print('{} to {}: {}.'.format(src, dst, cell['distance']['text']))
+                else:
+                    print('{} to {}: status = {}'.format(src, dst, cell['status']))
 
-    # for distance in drop_off_distances:
-    #     # Convert str to float
-    #     kilometers = distance[1]
-    #     kilometers = kilometers.split(' ')
-    #     kilometers.pop(1)
-    #     kms = ' '.join(kilometers)
-     
-    #     if float(kms) < 50:
-    #         print(distance[1])
-    print(drop_offs)       
-    print(drop_off_distances)
+    def convert_to_int_float(value):
+        try:
+            return float(value)
+        except ValueError:
+            # return float(value)
+            return int(value.replace(",", ""))
+    
+    # print(drop_off_distances)
+
+    for drop_off in drop_off_distances:
+        # Convert str to float
+        kilometers = drop_off_distances[drop_off]
+        kilometers = kilometers.split(' ')
+        kilometers.pop(1)
+        kms = ' '.join(kilometers)
+        drop_off_distances[drop_off] = convert_to_int_float(kms)
+
+        print('drop off: ' + drop_off)
+        print('kms: ' + kms)
+        print(type(drop_off_distances[drop_off]))
+
+    # Remove drop-offs with greater distance than 40kms
+    # Loop through listified of dict to avoid RunTime error
+    for drop_off, distance in list(drop_off_distances.items()):
+        if distance > 45:
+            drop_off_distances.pop(drop_off)
+         
+    # print(drop_off_distances)
 
     if not trips:
         flash("Sorry, no rides were found. Would you like to try another search?")
