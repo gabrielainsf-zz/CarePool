@@ -147,12 +147,14 @@ def search_rides():
 
     drop_offs = []
     for trip in trips:
-        drop_offs.append(trip.destination)
+        drop_offs.append(tuple([trip.trip_id, trip.destination]))
+        # ERROR: ValueError: could not convert string to float: 'Los Angeles, CA, USA'
+        # I think it's looping through the list of tuples... look into this!
 
     # Google Distance Matrix API set up
     base_url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
     origins = destination
-    destinations = drop_offs
+    destinations = drop_offs[1]
     payload = {
         "origins": convert.location_list(origins),
         "destinations": convert.location_list(destinations)
@@ -180,15 +182,17 @@ def search_rides():
                 else:
                     print('{} to {}: status = {}'.format(src, dst, cell['status']))
 
-    for distance in drop_off_distances:
-        # Convert str to float
-        kilometers = distance[1]
-        kilometers = kilometers.split(' ')
-        kilometers.pop(1)
-        kms = ' '.join(kilometers)
+    # for distance in drop_off_distances:
+    #     # Convert str to float
+    #     kilometers = distance[1]
+    #     kilometers = kilometers.split(' ')
+    #     kilometers.pop(1)
+    #     kms = ' '.join(kilometers)
      
-        if float(kms) < 50:
-            print(distance[1])
+    #     if float(kms) < 50:
+    #         print(distance[1])
+    print(drop_offs)       
+    print(drop_off_distances)
 
     if not trips:
         flash("Sorry, no rides were found. Would you like to try another search?")
