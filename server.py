@@ -141,7 +141,8 @@ def search_rides():
     destination = request.form['destination']
     date = request.form['date']
     date_obj = datetime.strptime(date, "%m/%d/%Y").date()
-
+    print(date)
+    print(date_obj)
     # Data from query - list of trips from origin
     trips = Trip.query.filter(Trip.origin == origin).all()
 
@@ -152,15 +153,15 @@ def search_rides():
         # I think it's looping through the list of tuples... look into this!
 
     # Google Distance Matrix API set up
-    base_url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
-    origins = destination
-    destinations = drop_offs[1]
-    payload = {
-        "origins": convert.location_list(origins),
-        "destinations": convert.location_list(destinations)
-    }
+    # base_url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
+    # origins = destination
+    # destinations = drop_offs[1]
+    # payload = {
+    #     "origins": convert.location_list(origins),
+    #     "destinations": convert.location_list(destinations)
+    # }
 
-    r = requests.get(base_url, params = payload)
+    # r = requests.get(base_url, params = payload)
 
     # Will be a list of tuples with possible drop-off and distance from desired
     # destination
@@ -168,19 +169,19 @@ def search_rides():
 
     # Check the HTTP status code returned by the server. Only process the response, 
     # if the status code is 200 (OK in HTTP terms).
-    if r.status_code != 200:
-        print('HTTP status code {} received, program terminated.'.format(r.status_code))
-    else:
-        x = json.loads(r.text)
-        for isrc, src in enumerate(x['origin_addresses']):
-            for idst, dst in enumerate(x['destination_addresses']):
-                row = x['rows'][isrc]
-                cell = row['elements'][idst]
-                if cell['status'] == 'OK':
-                    drop_off_distances.append(tuple((dst, cell['distance']['text'])))
-                    print('{} to {}: {}.'.format(src, dst, cell['distance']['text']))
-                else:
-                    print('{} to {}: status = {}'.format(src, dst, cell['status']))
+    # if r.status_code != 200:
+    #     print('HTTP status code {} received, program terminated.'.format(r.status_code))
+    # else:
+    #     x = json.loads(r.text)
+    #     for isrc, src in enumerate(x['origin_addresses']):
+    #         for idst, dst in enumerate(x['destination_addresses']):
+    #             row = x['rows'][isrc]
+    #             cell = row['elements'][idst]
+    #             if cell['status'] == 'OK':
+    #                 drop_off_distances.append(tuple((dst, cell['distance']['text'])))
+    #                 print('{} to {}: {}.'.format(src, dst, cell['distance']['text']))
+    #             else:
+    #                 print('{} to {}: status = {}'.format(src, dst, cell['status']))
 
     # for distance in drop_off_distances:
     #     # Convert str to float
