@@ -3,6 +3,10 @@
 //   $( "#datepicker" ).datepicker();
 // } );
 
-$( function() {
-  $( "#datepicker" ).datepicker('option', 'dateFormat', 'yy-mm-dd');
-} );
+// var datepicker = $.fn.datepicker.noConflict();
+$.noConflict();
+jQuery( document ).ready(function( $ ) {
+    $(function() {
+    $( "#datepicker" ).datepicker('option', 'dateFormat', 'yy-mm-dd');
+    } );
+});

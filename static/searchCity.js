@@ -22,8 +22,3 @@ function initialize() {
         return false;
     });
 }
-
-// Datepicker
-$( function() {
-  $( "#datepicker" ).datepicker();
-} );
