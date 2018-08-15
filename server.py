@@ -141,10 +141,12 @@ def search_rides():
     destination = request.form['destination']
     date = request.form['date']
     date_obj = datetime.strptime(date, "%m/%d/%Y").date()
-    print(date)
-    print(date_obj)
+    # print(date)
+    # print(date_obj)
+
+
     # Data from query - list of trips from origin
-    
+
     # Query for origin and destination, if none, then nearby trips
     trips = Trip.query.filter(Trip.origin == origin,
                               Trip.destination == destination).all()
