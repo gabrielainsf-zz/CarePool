@@ -190,8 +190,6 @@ def search_rides():
         except ValueError:
             # return float(value)
             return int(value.replace(",", ""))
-    
-    # print(drop_off_distances)
 
     for drop_off in drop_off_distances:
         # Convert str to float
@@ -201,17 +199,21 @@ def search_rides():
         kms = ' '.join(kilometers)
         drop_off_distances[drop_off] = convert_to_int_float(kms)
 
-        print('drop off: ' + drop_off)
-        print('kms: ' + kms)
-        print(type(drop_off_distances[drop_off]))
-
     # Remove drop-offs with greater distance than 40kms
     # Loop through listified of dict to avoid RunTime error
     for drop_off, distance in list(drop_off_distances.items()):
         if distance > 45:
             drop_off_distances.pop(drop_off)
-         
-    # print(drop_off_distances)
+    
+    # Dictionary that will store trip id, distance
+    drop_offs_nearby = {}
+    # Consider if there are multiple trips, what happens then to trip_ids since
+    # they will be reassigned
+    for drop_off in drop_off_distances:     
+        for trip in trips:
+            if trip.destination == drop_off:
+                drop_offs_nearby[drop_off] = {'trip_id': trip.trip_id,
+                                              'distance': drop_off_distances[drop_off]}
 
     if not trips:
         flash("Sorry, no rides were found. Would you like to try another search?")
