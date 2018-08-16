@@ -1,6 +1,7 @@
 """Models and database functions for Rideshare project."""
 
 from flask_sqlalchemy import SQLAlchemy
+from datetime import date
 # from server import login
 
 # This is the connection to the PostgreSQL database; we're getting this through
@@ -56,7 +57,13 @@ class Trip(db.Model):
     # Back reference to User
     user = db.relationship("User", backref=db.backref("trips", order_by=trip_id))
 
+    def to_json(self):
+        """Converts to JSON"""
 
+        datetime_str = self.date_of_trip.strftime('%y')
+
+        return {'trip_id': self.trip_id,
+                'date_of_trip': datetime_str}
 
 class UserTrip(db.Model):
     """User (passenger) has joined a trip."""

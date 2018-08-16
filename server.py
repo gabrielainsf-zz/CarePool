@@ -5,6 +5,7 @@ from model import connect_to_db, db, User, Trip, UserTrip
 from datetime import datetime, date
 from googlemaps import convert
 from googlemaps.convert import as_list
+from twilio.rest import Client
 import requests
 import os
 
@@ -23,6 +24,10 @@ app.secret_key = "ABC"
 
 # Google Place key
 googlePlaceKey = os.environ['GOOGLE_PLACES_KEY']
+twilioSID = os.environ['TWILIO_SID']
+twilioAuthKey = os.environ['TWILIO_AUTH_KEY']
+twilioNum = os.environ['TWILIO_NUM']
+myNum = os.environ['MY_NUM']
 
 # Normally, if you use an undefined variable in Jinja2, it fails
 # silently. This is horrible. Fix this so that, instead, it raises an
@@ -39,12 +44,59 @@ def index():
 
     if user_id:
         trips = Trip.query.filter(Trip.user_id == user_id).all()
+        # trips_as_passenger = UserTrip.query.filter(UserTrip.users.user_id == user_id).all()
+
         return render_template('homepage.html',
                                 trips=trips,
                                 today=today)
     else:
         flash("Oops! You need to log in.")
         return render_template('login_form.html')
+
+@app.route('/2')
+def index2():
+
+    user_id = session.get('user_id')
+    today = date.today()
+    print('\n\n /2: ')
+    print(user_id)
+
+    if user_id:
+    #     trips = Trip.query.filter(Trip.user_id == user_id).all()
+        # trips_as_passenger = UserTrip.query.filter(UserTrip.users.user_id == user_id).all()
+
+        return render_template('homepage2.html')
+    # else:
+    #     flash("Oops! You need to log in.")
+    #     return jsonify({'status': 'You"re not logged in'})
+
+@app.route('/trips.json')
+def trips():
+    """Return trips where user is a driver or passenger."""
+
+    user_id = session.get('user_id')
+    print('\n\n /trips.json: ')
+    print(user_id)
+    today = date.today()
+
+    if user_id:
+        trips = Trip.query.filter(Trip.user_id == user_id).all()
+
+        trips_dict = [trip.to_json() for trip in trips]
+    # import pdb;pdb.set_trace()
+
+
+    # trips_as_passenger = UserTrip.query.filter(UserTrip.users.user_id == user_id).all()
+
+    # return render_template('homepage.html',
+    #                         trips=trips,
+    #                         today=today,
+    #                         trips_as_passenger=trips_as_passenger)
+
+        return jsonify({'trips': trips_dict})
+    else:
+        flash("Oops! You need to log in.")
+        return jsonify({'status': 'You"re not logged in'})
 
 
 @app.route('/login')
@@ -81,7 +133,7 @@ def login_process():
             session['user_id'] = user_id
             flash('Yay! You are logged in.')
 
-    return redirect('/')
+    return redirect('/2')
 
 @app.route('/add-ride')
 def add_trip():
@@ -271,6 +323,22 @@ def create_user_trip():
     else:
         flash("Sorry, ride is already full!")
 
+# @app.route('/notify', methods=["GET"])
+    
+#     return render_template('send_notification.html')
+
+@app.route('/notify', methods=["POST"])
+def notify_user():
+
+    client = Client(twilioSID, twilioAuthKey)
+
+    msg = request.form.get("msg")
+
+    message = client.messages.create(
+        to=myNum,
+        from_=twilioNum,
+        body=msg)
+
 # @app.route('/update-ride', methods=["POST"])
 # def update_trip():
 
@@ -319,7 +387,7 @@ def logout():
 if __name__ == "__main__":
     # We have to set debug=True here, since it has to be True at the
     # point that we invoke the DebugToolbarExtension
-    app.debug = False
+    app.debug = True
     # make sure templates, etc. are not cached in debug mode
     app.jinja_env.auto_reload = app.debug
 

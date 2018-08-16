@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <p id="trips"> </p>
+
+<script>
+    
+    let trips;
+
+    $.get('/trips.json', function(data) {
+        $("#trips").text(data);
+    });
+
+//     fetch('/trips.json').then(function(response) {
+//         if(response.ok) {
+//             response.json().then(function(json) {
+//             trips = json;
+//                         debugger;
+//             initialize();
+//             });
+//         } else {
+//             console.log('Network request for products.json failed with response ' + response.status + ': ' + response.statusText);
+//   }
+// });
+    // sets up the app logic, declares required variables, contains all the other functions
+    function initialize() {
+        // grab the UI elements that we need to manipulate
+      
+    }
+
+</script>
+</body>
+</html>
