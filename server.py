@@ -322,6 +322,7 @@ def create_user_trip():
         return redirect('/')
     else:
         flash("Sorry, ride is already full!")
+        return redirect('/')
 
 # @app.route('/notify', methods=["GET"])
     

@@ -23,7 +23,6 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(64), nullable=True)
     password = db.Column(db.String(64), nullable=True)
-    # authenticated = db.Column(db.Boolean, default=False)
 
     # Profile information
     fname = db.Column(db.String(20), nullable=False)
@@ -32,7 +31,20 @@ class User(db.Model):
     user_bio = db.Column(db.String(160), nullable=False)
     user_profile_img = db.Column(db.String(250), nullable=False)
     user_social_media = db.Column(db.String(3000), nullable=False)
+    # phone_number = db.Column(db.Numeric(12), nullable=True)
 
+    def to_json(self):
+        """Converts to JSON"""
+
+        return {'user_id': self.user_id,
+                'email': self.email,
+                'password': self.password,
+                'fname': self.fname,
+                'lname': self.lname,
+                'user_gender': self.user_gender,
+                'user_bio': self.user_bio,
+                'user_profile_img': self.user_profile_img,
+                'user_social_media': self.user_social_media}
 
 class Trip(db.Model):
     """Trip information."""
@@ -60,10 +72,17 @@ class Trip(db.Model):
     def to_json(self):
         """Converts to JSON"""
 
-        datetime_str = self.date_of_trip.strftime('%y')
+        datetime_str = self.date_of_trip.strftime('%Y-%m-%d')
 
         return {'trip_id': self.trip_id,
-                'date_of_trip': datetime_str}
+                'date_of_trip': datetime_str,
+                'max_passengers': self.max_passengers,
+                'num_passengers': self.num_passengers,
+                'willing_to_stop': self.willing_to_stop,
+                'trip_cost': self.trip_cost,
+                'origin': self.origin,
+                'destination': self.destination,
+                'user_as_driver': self.user_id}
 
 class UserTrip(db.Model):
     """User (passenger) has joined a trip."""

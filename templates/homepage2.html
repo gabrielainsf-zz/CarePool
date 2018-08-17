@@ -10,32 +10,138 @@
 </head>
 <body>
 
-    <p id="trips"> </p>
+    <div id="todayTable""></div>
+    <div id="upcomingTable"> </div>
+    <div id="pastTable"></div>
+
+     <style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 5px;
+        text-align: left;
+    }
+</style>
 
 <script>
     
-    let trips;
 
-    $.get('/trips.json', function(data) {
-        $("#trips").text(data);
-    });
+    function sortTripsByDate(results) {
+        let trips = results["trips"];
 
-//     fetch('/trips.json').then(function(response) {
-//         if(response.ok) {
-//             response.json().then(function(json) {
-//             trips = json;
-//                         debugger;
-//             initialize();
-//             });
-//         } else {
-//             console.log('Network request for products.json failed with response ' + response.status + ': ' + response.statusText);
-//   }
-// });
-    // sets up the app logic, declares required variables, contains all the other functions
-    function initialize() {
-        // grab the UI elements that we need to manipulate
-      
+        let todaysDate = new Date()
+        let todaysDateUTC = Date.UTC(todaysDate.getUTCFullYear(),
+                                     todaysDate.getUTCMonth(),
+                                     todaysDate.getUTCDate())
+       
+        let upcomingTrips = new Array();
+        let pastTrips = new Array();
+        let todaysTrips = new Array();
+
+        for (let i = 0; i < trips.length; i++) {
+            
+            date = new Date(trips[i]["date_of_trip"]);
+            utc_date = Date.UTC(date.getUTCFullYear(),
+                                date.getUTCMonth(),
+                                date.getUTCDate());
+    
+
+            if (utc_date == todaysDateUTC) {
+                todaysTrips.push(trips[i]);
+            } else if (utc_date > todaysDateUTC) {
+                upcomingTrips.push(trips[i]);
+            } else if (utc_date < todaysDateUTC) {
+                pastTrips.push(trips[i]);
+            }
+        }
+
+        if (todaysTrips.length > 0) {
+            createTodaysTripsTable(todaysTrips)
+        }
+
+        if (upcomingTrips.length > 0) {
+            createUpcomingTripsTable(upcomingTrips);
+        }
+
+        if (pastTrips.length > 0) {
+            createPastTripsTable(pastTrips);
+        }
     }
+
+    function getTrips() {
+        $.get('/trips.json', sortTripsByDate);
+    }
+
+    getTrips();
+
+    function createTodaysTripsTable(todaysTrips) {
+
+        let table = "<table>";
+        table += "<caption>Today's rides</caption>";
+        table += "<th>Date:</th>";
+        table += "<th>From:</th>";
+        table += "<th>To:</th>";
+        
+        for (let i = 0; i < todaysTrips.length; i++) {
+
+            table += "<tr>";
+            table += "<td>"+todaysTrips[i]["date_of_trip"]+"</td>";
+            table += "<td>"+todaysTrips[i]["origin"]+"</td>";
+            table += "<td>"+todaysTrips[i]["destination"]+"</td>";
+            table += "</tr>";
+        }  
+
+        table += "</table>";
+        table += "<br><br>";
+        document.getElementById("upcomingTable").innerHTML = table;
+    }
+
+    function createUpcomingTripsTable(upcomingTrips) {
+
+        let table = "<table>";
+        table += "<caption>Upcoming rides</caption>";
+        table += "<th>Date:</th>";
+        table += "<th>From:</th>";
+        table += "<th>To:</th>";
+        
+        for (let i = 0; i < upcomingTrips.length; i++) {
+
+            table += "<tr>";
+            table += "<td>"+upcomingTrips[i]["date_of_trip"]+"</td>";
+            table += "<td>"+upcomingTrips[i]["origin"]+"</td>";
+            table += "<td>"+upcomingTrips[i]["destination"]+"</td>";
+            table += "</tr>";
+        }  
+
+        table += "</table>";
+        table += "<br><br>";
+        document.getElementById("upcomingTable").innerHTML = table;
+    }
+
+    function createPastTripsTable(pastTrips) {
+
+        let table = "<table>";
+        table += "<caption>Past rides</caption>";
+        table += "<th>Date:</th>";
+        table += "<th>From:</th>";
+        table += "<th>To:</th>";
+        
+        for (let i = 0; i < pastTrips.length; i++) {
+
+            table += "<tr>";
+            table += "<td>"+pastTrips[i]["date_of_trip"]+"</td>";
+            table += "<td>"+pastTrips[i]["origin"]+"</td>";
+            table += "<td>"+pastTrips[i]["destination"]+"</td>";
+            table += "</tr>";
+        }  
+
+        table += "</table>";
+        table += "<br><br>";
+        document.getElementById("pastTable").innerHTML = table;
+    }
+
 
 </script>
 </body>
