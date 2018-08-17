@@ -9,15 +9,7 @@ from twilio.rest import Client
 import requests
 import os
 
-# from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
-
 app = Flask(__name__)
-
-
-# Image uploads
-# photos = UploadSet('photos', IMAGES)
-# app.config['UPLOADED_PHOTOS_DEST'] = 'static/img'
-# configure_uploads(app, photos)
 
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
@@ -44,11 +36,13 @@ def index():
 
     if user_id:
         trips = Trip.query.filter(Trip.user_id == user_id).all()
-        # trips_as_passenger = UserTrip.query.filter(UserTrip.users.user_id == user_id).all()
+        trips_as_passenger = UserTrip.query.filter(UserTrip.user_id == user_id).all()
 
         return render_template('homepage.html',
                                 trips=trips,
-                                today=today)
+                                today=today,
+                                trips_as_passenger=trips_as_passenger,
+                                user_id=user_id)
     else:
         flash("Oops! You need to log in.")
         return render_template('login_form.html')
@@ -57,43 +51,28 @@ def index():
 def index2():
 
     user_id = session.get('user_id')
-    today = date.today()
-    print('\n\n /2: ')
-    print(user_id)
 
     if user_id:
-    #     trips = Trip.query.filter(Trip.user_id == user_id).all()
-        # trips_as_passenger = UserTrip.query.filter(UserTrip.users.user_id == user_id).all()
-
         return render_template('homepage2.html')
-    # else:
-    #     flash("Oops! You need to log in.")
-    #     return jsonify({'status': 'You"re not logged in'})
+    else:
+        flash("Oops! You need to log in.")
+        return jsonify({'status': 'You"re not logged in'})
 
 @app.route('/trips.json')
 def trips():
     """Return trips where user is a driver or passenger."""
 
     user_id = session.get('user_id')
-    print('\n\n /trips.json: ')
-    print(user_id)
-    today = date.today()
 
     if user_id:
         trips = Trip.query.filter(Trip.user_id == user_id).all()
-
         trips_dict = [trip.to_json() for trip in trips]
-    # import pdb;pdb.set_trace()
 
-
-    # trips_as_passenger = UserTrip.query.filter(UserTrip.users.user_id == user_id).all()
-
-    # return render_template('homepage.html',
-    #                         trips=trips,
-    #                         today=today,
-    #                         trips_as_passenger=trips_as_passenger)
-
-        return jsonify({'trips': trips_dict})
+        trips_as_passenger = UserTrip.query.filter(UserTrip.user_id == user_id).all()
+        trips_pass_dict = [trip.to_json() for trip in trips_as_passenger] 
+               
+        return jsonify({'trips': trips_dict,
+                        'trips_as_pass': trips_pass_dict})
     else:
         flash("Oops! You need to log in.")
         return jsonify({'status': 'You"re not logged in'})
@@ -108,11 +87,9 @@ def display_login_form():
 @app.route('/login', methods=["POST"])
 def login_process():
 
-    # Form data
     email = request.form['email']
     password = request.form['password']
 
-    # DB data
     user_by_email = User.query.filter(User.email == email).first()
 
 
@@ -137,6 +114,7 @@ def login_process():
 
 @app.route('/add-ride')
 def add_trip():
+    """Adds ride to the rides table."""
 
     user_id = session.get('user_id')
 
@@ -309,15 +287,14 @@ def create_user_trip():
     # Ensure there is still space before adding to current passengers
     if trip.num_passengers < trip.max_passengers:
         
-        # Increment number of passengers in ride
         trip.num_passengers += 1
 
-        # Instantiate new UserTrip obj
         new_user_trip = UserTrip(trip_id=trip_id,
-                             user_id=user_id)
+                                 user_id=user_id)
 
         db.session.add(new_user_trip)
         db.session.commit()
+
         flash("Ride joined!")
         return redirect('/')
     else:
@@ -340,39 +317,6 @@ def notify_user():
         from_=twilioNum,
         body=msg)
 
-# @app.route('/update-ride', methods=["POST"])
-# def update_trip():
-
-#     trip_id = request.form['trip']
-
-#     return render_template('update_ride.html', trip_id=trip_id)
-
-# @app.route('/update-ride-submit', methods=["POST"])
-# def update_trip_process():
-
-#     trip_id = request.form['trip']
-
-#     # Data from form
-#     trip_date = request.form.get('date', None)
-#     trip_origin = request.form.get('origin', None)
-#     trip_destination = request.form.get('destination', None)
-#     max_passengers = request.form.get('max_passengers', None)
-#     trip_cost = request.form.get('cost', None)
-#     willing_to_stop = request.form.get('newleg', None)
-
-#     # Data from query
-#     trip = Trip.query.filter(Trip.trip_id == trip_id)
-
-#     # Update row
-#     # Write in conditionals, check if there is data returned or Null value to update
-#     if trip_date is not None:
-#         trip.trip_date = trip_date
-
-#         flash("Ride updated!")
-    
-#     return redirect('/')
-
-
 
 @app.route('/logout')
 def logout():
@@ -381,7 +325,7 @@ def logout():
     del session['user_id']
     flash('Logged out!')
 
-    return redirect('/')
+    return redirect('/login')
     # Later change to landing page
 
 

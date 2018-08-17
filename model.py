@@ -102,6 +102,17 @@ class UserTrip(db.Model):
     # Back reference to User
     user = db.relationship("User", backref=db.backref("user_trips", order_by=user_trip_id))
 
+    def to_json(self):
+        """Converts to JSON"""
+
+        return {'user_trip_id': self.user_trip_id,
+                'trip_id': self.trip_id,
+                'user_id': self.user_id,
+                'date_of_trip': self.trip.date_of_trip,
+                'user_fname': self.user.fname,
+                'origin': self.trip.origin,
+                'destination': self.trip.destination}
+
 
 
 ##############################################################################

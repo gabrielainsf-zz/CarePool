@@ -10,9 +10,13 @@
 </head>
 <body>
 
-    <div id="todayTable""></div>
-    <div id="upcomingTable"> </div>
-    <div id="pastTable"></div>
+    <div id="todayTable""></div><br>
+    <div id="upcomingTable"> </div><br>
+    <div id="pastTable"></div><br>
+    
+    <div class="trips">
+        <table class="trip"></table>
+    </div>
 
      <style>
     table, th, td {
@@ -26,10 +30,10 @@
 </style>
 
 <script>
-    
 
     function sortTripsByDate(results) {
         let trips = results["trips"];
+        let trips_passenger = results["trips_as_pass"]
 
         let todaysDate = new Date()
         let todaysDateUTC = Date.UTC(todaysDate.getUTCFullYear(),
@@ -68,6 +72,8 @@
         if (pastTrips.length > 0) {
             createPastTripsTable(pastTrips);
         }
+
+        createPassTable(trips_passenger);
     }
 
     function getTrips() {
@@ -79,7 +85,7 @@
     function createTodaysTripsTable(todaysTrips) {
 
         let table = "<table>";
-        table += "<caption>Today's rides</caption>";
+        table += "<caption>Today's ride</caption>";
         table += "<th>Date:</th>";
         table += "<th>From:</th>";
         table += "<th>To:</th>";
@@ -94,7 +100,6 @@
         }  
 
         table += "</table>";
-        table += "<br><br>";
         document.getElementById("upcomingTable").innerHTML = table;
     }
 
@@ -116,7 +121,6 @@
         }  
 
         table += "</table>";
-        table += "<br><br>";
         document.getElementById("upcomingTable").innerHTML = table;
     }
 
@@ -138,8 +142,31 @@
         }  
 
         table += "</table>";
-        table += "<br><br>";
         document.getElementById("pastTable").innerHTML = table;
+    }
+
+    function createPassTable(trips_passenger) {
+
+        // let table = "<table>";
+        let table = "<caption>Rides as passenger</caption>";
+        table += "<th>Date:</th>";
+        table += "<th>From:</th>";
+        table += "<th>To:</th>";
+        console.log(trips_passenger);
+        for (let i = 0; i < trips_passenger.length; i++) {
+
+            table += "<tr>";
+            table += "<td>"+trips_passenger[i]["date_of_trip"]+"</td>";
+            table += "<td>"+trips_passenger[i]["origin"]+"</td>";
+            table += "<td>"+trips_passenger[i]["destination"]+"</td>";
+            table += "</tr>";
+        }
+
+        // table += "</table>";
+        let tableList = document.getElementsByClassName("trips")[0]
+
+        tableList.getElementsByClassName("trip")[0].innerHTML = table;
+
     }
 
 
