@@ -19,24 +19,32 @@
             <img id="profileImg" src="">
         </div><br>
 
-        <div>
+        
+        <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active nav-item"><a data-toggle="tab" class="nav-link" href="#home">Home</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsDriver">I'm Driving</a></li>
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsPassenger">I'm Joining</a></li>
+        </ul>
 
-        <h2>Rides you're leading:</h2>
-        <div class="row">
-            <div class="col" id="todayTable"></div>
-            <div class="col" id="upcomingTable"> </div>
-            <div class="col" id="pastTable"></div>
+        <div class="tab-content">
+            <div id="home" class="tab-pane fade">
+                <br><br>
+                <p>Hello</p>
+            </div>
+            <div id="ridesAsDriver" class="tab-pane fade">
+                    <div id="todayTable"></div>
+                    <div id="upcomingTable"> </div>
+                    <div id="pastTable"></div>
+            </div>
+
+            <div id="ridesAsPassenger" class="tab-pane fade">
+                <div id="passengerTodayTable"></div>
+                <div id="passengerUpcomingTable"></div>
+                <div id="passengerPastTable"></div>
+            </div>
         </div>
-
         </div>
-
-        <h2>Rides you're joining:</h2>
-
-            <div id="passengerTodayTable"></div>
-            <div id="passengerUpcomingTable"></div>
-            <div id="passengerPastTable"></div>
-
-    </div>
 
 <script>
 
@@ -162,7 +170,7 @@
             table += "<th>Date:</th>";
             table += "<th>From:</th>";
             table += "<th>To:</th>";
-            table += "<th>Passengers:</th>";
+            table += "<th>Driver:</th>";
 
             
             for (let i = trips.length-1; i >= 0; i--) {
