@@ -74,7 +74,7 @@ def trips():
             trip_json = trip.to_json()
             trips_dict.append(trip_json)
 
-            results = UserTrip.query.filter(UserTrip.trip_id == trip_json["trip_id"]).all()
+            results = UserTrip.query.filter(UserTrip.trip_id == trip_json["tripId"]).all()
 
             trip_json["passengers"] = [result.to_json() for result in results]        
 
@@ -83,7 +83,7 @@ def trips():
 
 
         return jsonify({'trips': trips_dict,
-                        'trips_as_pass': trips_pass_dict})
+                        'tripsAsPassenger': trips_pass_dict})
     else:
         flash("Oops! You need to log in.")
         return jsonify({'status': 'You"re not logged in'})

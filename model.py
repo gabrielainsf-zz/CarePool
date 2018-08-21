@@ -74,15 +74,17 @@ class Trip(db.Model):
 
         datetime_str = self.date_of_trip.strftime('%Y-%m-%d')
 
-        return {'trip_id': self.trip_id,
-                'date_of_trip': datetime_str,
-                'max_passengers': self.max_passengers,
-                'num_passengers': self.num_passengers,
-                'willing_to_stop': self.willing_to_stop,
-                'trip_cost': self.trip_cost,
+        return {'tripId': self.trip_id,
+                'dateOfTrip': datetime_str,
+                'maxPassengers': self.max_passengers,
+                'numPassengers': self.num_passengers,
+                'willingToStop': self.willing_to_stop,
+                'tripCost': self.trip_cost,
                 'origin': self.origin,
                 'destination': self.destination,
-                'user_as_driver': self.user_id}
+                'userAsDriver': self.user_id,
+                'userFirstName': self.user.fname,
+                'userProfileImg': self.user.user_profile_img}
 
 class UserTrip(db.Model):
     """User (passenger) has joined a trip."""
@@ -107,12 +109,12 @@ class UserTrip(db.Model):
 
         datetime_str = self.trip.date_of_trip.strftime('%Y-%m-%d')
 
-        return {'user_trip_id': self.user_trip_id,
-                'trip_id': self.trip_id,
-                'user_id': self.user_id,
-                'date_of_trip': datetime_str,
-                'user_fname': self.user.fname,
-                'user_img': self.user.user_profile_img,
+        return {'userTripId': self.user_trip_id,
+                'tripId': self.trip_id,
+                'userId': self.user_id,
+                'dateOfTrip': datetime_str,
+                'userFirstName': self.user.fname,
+                'userProfileImg': self.user.user_profile_img,
                 'origin': self.trip.origin,
                 'destination': self.trip.destination}
 
@@ -139,6 +141,7 @@ def example_data():
                 password="jo@bama.com",
                 user_profile_img="https://robohash.org/enimsolutaqui.png?size=50x50&set=set1",
                 user_social_media="twitter.com")
+    
     db.session.add(user)
     db.session.commit()
 

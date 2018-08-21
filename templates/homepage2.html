@@ -7,40 +7,42 @@
     src="https://code.jquery.com/jquery-3.3.1.min.js"
     integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
 
 </head>
 <body>
 
-    <div>
-        <img id="profileImg" src="">
-    </div><br>
+    <div class="container-fluid">
 
-    <div id="todayTable""></div><br>
-    <div id="upcomingTable"> </div><br>
-    <div id="pastTable"></div><br>
-    
-    <div class="trips">
-        <table class="trip"></table>
+        <div>
+            <img id="profileImg" src="">
+        </div><br>
+
+        <div>
+
+        <h2>Rides you're leading:</h2>
+        <div class="row">
+            <div class="col" id="todayTable"></div>
+            <div class="col" id="upcomingTable"> </div>
+            <div class="col" id="pastTable"></div>
+        </div>
+
+        </div>
+
+        <h2>Rides you're joining:</h2>
+
+            <div id="passengerTodayTable"></div>
+            <div id="passengerUpcomingTable"></div>
+            <div id="passengerPastTable"></div>
+
     </div>
-
-    <style>
-    table, th, td {
-        border: 1px solid black;
-        border-collapse: collapse;
-    }
-    th, td {
-        padding: 5px;
-        text-align: left;
-    }
-    </style>
 
 <script>
 
     function sortTripsByDate(results) {
-        let trips = results["trips"];
-        let trips_passenger = results["trips_as_pass"]
-        // const { trips, trips_as_pass } = results;
+     
+        const { trips, tripsAsPassenger } = results;
 
         let todaysDate = new Date()
         let todaysDateUTC = Date.UTC(todaysDate.getUTCFullYear(),
@@ -51,9 +53,13 @@
         let pastTrips = new Array();
         let todaysTrips = new Array();
 
+        let passengerUpcomingTrips = new Array();
+        let passengerPastTrips = new Array();
+        let passengerTodaysTrips = new Array();
+
         for (let i = 0; i < trips.length; i++) {
             
-            date = new Date(trips[i]["date_of_trip"]);
+            date = new Date(trips[i]["dateOfTrip"]);
             utc_date = Date.UTC(date.getUTCFullYear(),
                                 date.getUTCMonth(),
                                 date.getUTCDate());
@@ -67,30 +73,31 @@
                 pastTrips.push(trips[i]);
             }
         }
-    //     const tripMap = [( todaysTrips, createTodaysTripsTable), ]
-    //     tripMap.map((tripMap) => {
-    //         if (tripMap[0].length > 0) {
-    //             tripMap[1](tripMap[0])
-    //         }
-    //     })
 
-    //     if (todaysTrips.length > 0) {
-    //         createTodaysTripsTable(todaysTrips)
-    //     }
+        for (let i = 0; i < tripsAsPassenger.length; i++) {
+            
+            date = new Date(tripsAsPassenger[i]["dateOfTrip"]);
+            utc_date = Date.UTC(date.getUTCFullYear(),
+                                date.getUTCMonth(),
+                                date.getUTCDate());
+    
 
-    //     if (upcomingTrips.length > 0) {
-    //         createUpcomingTripsTable(upcomingTrips);
-    //     }
+            if (utc_date == todaysDateUTC) {
+                passengerTodaysTrips.push(tripsAsPassenger[i]);
+            } else if (utc_date > todaysDateUTC) {
+                passengerUpcomingTrips.push(tripsAsPassenger[i]);
+            } else if (utc_date < todaysDateUTC) {
+                passengerPastTrips.push(tripsAsPassenger[i]);
+            }
+        }
 
-    //     if (pastTrips.length > 0) {
-    //         createPastTripsTable(pastTrips);
-    //     }
-
+        createTripTable(todaysTrips, "Today\'s Trip", 'todayTable');
         createTripTable(upcomingTrips, 'Upcoming Trips', 'upcomingTable');
         createTripTable(pastTrips, 'Past trips', 'pastTable');
-        createTripTable(todaysTrips, "Today\'s Trip", 'todayTable');
 
-        createPassTable(trips_passenger);
+        createPassengerTripTable(passengerTodaysTrips, "Today\'s' Trips", 'passengerUpcomingTable')
+        createPassengerTripTable(passengerUpcomingTrips, 'Upccoming Trips', 'passengerUpcomingTable')
+        createPassengerTripTable(passengerPastTrips, 'Past Trips', 'passengerPastTable')
     }
 
     function getTrips() {
@@ -101,39 +108,73 @@
 
     function createTripTable(trips, title, elementID) {
 
-        // If trips is empty, do nothing
         if (trips.length === 0) {
             return null;
         } else {
-            let table = "<table>";
-            table += `<caption>${title}</caption>`;
+            let table = "<table class='table'>";
+            table += `<h3>${title}</h3>`;
+            table += "<thead>";
+            table += "<tr>";
+            table += "<th scope='col'>Date:</th>";
+            table += "<th scope='col'>From:</th>";
+            table += "<th scope='col'>To:</th>";
+            table += "<th scope='col'>Passengers:</th>";
+            table += "</tr>";
+            table += "</thead>";
+
+            
+            for (let i = trips.length-1; i >= 0; i--) {
+
+                let passengerFirstName;
+                let passengerProfileImg;
+
+                passengerList = trips[i]["passengers"];
+
+                // Map (like list comprehension)
+                for (let j = 0; j < passengerList.length; j++) {
+                    passengerFirstName = passengerList[j]["userFirstName"];
+                    passengerProfileImg = passengerList[j]["userProfileImg"];
+                }
+                
+                table += "<tbody>"
+                table += "<tr>";
+                table += "<td>"+trips[i]["dateOfTrip"]+"</td>";
+                table += "<td>"+trips[i]["origin"]+"</td>";
+                table += "<td>"+trips[i]["destination"]+"</td>";
+                table += "<td>"+(passengerFirstName != undefined ? passengerFirstName + `<img src=${passengerProfileImg}>` : "No passengers yet!")+"</td>";
+        
+                table += "</tr>";
+            }  
+            table += "</tbody>"
+            table += "</table>";
+            document.getElementById(elementID).innerHTML = table;
+            }
+
+    }
+
+   function createPassengerTripTable(trips, title, elementID) {
+
+        if (trips.length === 0) {
+            return null;
+        } else {
+            let table = "<table class='table table-dark'>";
+            table += `<h3>${title}</h3>`;
             table += "<th>Date:</th>";
             table += "<th>From:</th>";
             table += "<th>To:</th>";
             table += "<th>Passengers:</th>";
 
             
-            for (let i = 0; i < trips.length; i++) {
+            for (let i = trips.length-1; i >= 0; i--) {
 
-                let passenger_fn;
-                let passenger_img;
-
-                    passengerList = trips[i]["passengers"]
-
-                // Map (like list comprehension)
-                for (let j = 0; j < passengerList.length; j++) {
-                    passenger_fn = passengerList[j]["user_fname"];
-                    passenger_img = passengerList[j]["user_img"];
-                }
-                
+                let userProfileImg = trips[i]["userProfileImg"];
 
                 table += "<tr>";
-                table += "<td>"+trips[i]["date_of_trip"]+"</td>";
+                table += "<td>"+trips[i]["dateOfTrip"]+"</td>";
                 table += "<td>"+trips[i]["origin"]+"</td>";
                 table += "<td>"+trips[i]["destination"]+"</td>";
-                table += "<td>"+(passenger_fn != undefined ? passenger_fn : "No passengers yet!")+
-        
-                "</td>";
+                table += "<td>"+trips[i]["userFirstName"]
+                               + `<img src="${userProfileImg}">`+"</td>";
         
                 table += "</tr>";
             }  
@@ -141,30 +182,6 @@
             table += "</table>";
             document.getElementById(elementID).innerHTML = table;
             }
-
-    }
-
-
-    function createPassTable(trips_passenger) {
-
-        let table = "<caption>Rides as passenger</caption>";
-        table += "<th>Date:</th>";
-        table += "<th>From:</th>";
-        table += "<th>To:</th>";
-        table += "<th>Driver:</th>";
-
-        for (let i = 0; i < trips_passenger.length; i++) {
-
-            table += "<tr>";
-            table += "<td>"+trips_passenger[i]["date_of_trip"]+"</td>";
-            table += "<td>"+trips_passenger[i]["origin"]+"</td>";
-            table += "<td>"+trips_passenger[i]["destination"]+"</td>";
-            table += "<td>"+'driver'+"</td>";
-            table += "</tr>";
-        }
-
-        let tableList = document.getElementsByClassName("trips")[0]
-        tableList.getElementsByClassName("trip")[0].innerHTML = table;
 
     }
 
@@ -180,6 +197,13 @@
 
     getUserInfo();
 
+
+
 </script>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </body>
 </html>
