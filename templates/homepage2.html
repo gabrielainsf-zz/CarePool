@@ -3,10 +3,12 @@
 <head>
     <title></title>
 
-<script
-  src="https://code.jquery.com/jquery-3.3.1.min.js"
-  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-  crossorigin="anonymous"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+
+
 </head>
 <body>
 
@@ -38,6 +40,7 @@
     function sortTripsByDate(results) {
         let trips = results["trips"];
         let trips_passenger = results["trips_as_pass"]
+        // const { trips, trips_as_pass } = results;
 
         let todaysDate = new Date()
         let todaysDateUTC = Date.UTC(todaysDate.getUTCFullYear(),
@@ -64,18 +67,28 @@
                 pastTrips.push(trips[i]);
             }
         }
+    //     const tripMap = [( todaysTrips, createTodaysTripsTable), ]
+    //     tripMap.map((tripMap) => {
+    //         if (tripMap[0].length > 0) {
+    //             tripMap[1](tripMap[0])
+    //         }
+    //     })
 
-        if (todaysTrips.length > 0) {
-            createTodaysTripsTable(todaysTrips)
-        }
+    //     if (todaysTrips.length > 0) {
+    //         createTodaysTripsTable(todaysTrips)
+    //     }
 
-        if (upcomingTrips.length > 0) {
-            createUpcomingTripsTable(upcomingTrips);
-        }
+    //     if (upcomingTrips.length > 0) {
+    //         createUpcomingTripsTable(upcomingTrips);
+    //     }
 
-        if (pastTrips.length > 0) {
-            createPastTripsTable(pastTrips);
-        }
+    //     if (pastTrips.length > 0) {
+    //         createPastTripsTable(pastTrips);
+    //     }
+
+        createTripTable(upcomingTrips, 'Upcoming Trips', 'upcomingTable');
+        createTripTable(pastTrips, 'Past trips', 'pastTable');
+        createTripTable(todaysTrips, "Today\'s Trip", 'todayTable');
 
         createPassTable(trips_passenger);
     }
@@ -86,86 +99,51 @@
 
     getTrips();
 
-    function createTodaysTripsTable(todaysTrips) {
+    function createTripTable(trips, title, elementID) {
 
-        let table = "<table>";
-        table += "<caption>Today's ride</caption>";
-        table += "<th>Date:</th>";
-        table += "<th>From:</th>";
-        table += "<th>To:</th>";
-        
-        for (let i = 0; i < todaysTrips.length; i++) {
+        // If trips is empty, do nothing
+        if (trips.length === 0) {
+            return null;
+        } else {
+            let table = "<table>";
+            table += `<caption>${title}</caption>`;
+            table += "<th>Date:</th>";
+            table += "<th>From:</th>";
+            table += "<th>To:</th>";
+            table += "<th>Passengers:</th>";
 
-            table += "<tr>";
-            table += "<td>"+todaysTrips[i]["date_of_trip"]+"</td>";
-            table += "<td>"+todaysTrips[i]["origin"]+"</td>";
-            table += "<td>"+todaysTrips[i]["destination"]+"</td>";
-            table += "</tr>";
-        }  
+            
+            for (let i = 0; i < trips.length; i++) {
 
-        table += "</table>";
-        document.getElementById("upcomingTable").innerHTML = table;
-    }
+                let passenger_fn;
+                let passenger_img;
 
-    function createUpcomingTripsTable(upcomingTrips) {
+                    passengerList = trips[i]["passengers"]
 
-        let table = "<table>";
-        table += "<caption>Upcoming rides</caption>";
-        table += "<th>Date:</th>";
-        table += "<th>From:</th>";
-        table += "<th>To:</th>";
-        
-        for (let i = 0; i < upcomingTrips.length; i++) {
-
-            table += "<tr>";
-            table += "<td>"+upcomingTrips[i]["date_of_trip"]+"</td>";
-            table += "<td>"+upcomingTrips[i]["origin"]+"</td>";
-            table += "<td>"+upcomingTrips[i]["destination"]+"</td>";
-            table += "</tr>";
-        }  
-
-        table += "</table>";
-        document.getElementById("upcomingTable").innerHTML = table;
-    }
-
-    function createPastTripsTable(pastTrips) {
-
-        for (let i = 0; i < pastTrips.length; i++) {
-
-        }
-
-        let table = "<table>";
-        table += "<caption>Past rides</caption>";
-        table += "<th>Date:</th>";
-        table += "<th>From:</th>";
-        table += "<th>To:</th>";
-        table += "<th>Passengers:</th>";
-        
-        for (let i = 0; i < pastTrips.length; i++) {
-
-            let passenger_fn;
-            let passenger_img;
-
-            if (pastTrips[i].hasOwnProperty("passengers")) {
-                passengerList = pastTrips[i]["passengers"]
-
+                // Map (like list comprehension)
                 for (let j = 0; j < passengerList.length; j++) {
-                    passenger_fn = passengerList[j]["user_fname"]
-                    passenger_img = passengerList[j]["user_img"]
-                 }
+                    passenger_fn = passengerList[j]["user_fname"];
+                    passenger_img = passengerList[j]["user_img"];
+                }
+                
+
+                table += "<tr>";
+                table += "<td>"+trips[i]["date_of_trip"]+"</td>";
+                table += "<td>"+trips[i]["origin"]+"</td>";
+                table += "<td>"+trips[i]["destination"]+"</td>";
+                table += "<td>"+(passenger_fn != undefined ? passenger_fn : "No passengers yet!")+
+        
+                "</td>";
+        
+                table += "</tr>";
+            }  
+
+            table += "</table>";
+            document.getElementById(elementID).innerHTML = table;
             }
 
-            table += "<tr>";
-            table += "<td>"+pastTrips[i]["date_of_trip"]+"</td>";
-            table += "<td>"+pastTrips[i]["origin"]+"</td>";
-            table += "<td>"+pastTrips[i]["destination"]+"</td>";
-            table += "<td>"+(passenger_fn != undefined ? passenger_fn : "No passengers yet!")+"</td>";
-            table += "</tr>";
-        }  
-
-        table += "</table>";
-        document.getElementById("pastTable").innerHTML = table;
     }
+
 
     function createPassTable(trips_passenger) {
 

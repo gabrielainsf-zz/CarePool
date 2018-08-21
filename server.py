@@ -49,6 +49,7 @@ def index():
 
 @app.route('/2')
 def index2():
+    """Display homepage built with JavaScript instead of Jinja templating."""
 
     user_id = session.get('user_id')
 
@@ -67,17 +68,15 @@ def trips():
     if user_id:
         trips = Trip.query.filter(Trip.user_id == user_id).all()
 
-        # trips_dict = [trip.to_json() for trip in trips]
-
         trips_dict = []
-
 
         for trip in trips:
             trip_json = trip.to_json()
             trips_dict.append(trip_json)
+
             results = UserTrip.query.filter(UserTrip.trip_id == trip_json["trip_id"]).all()
-            for result in results:
-                trip_json["passengers"] = [(result.to_json())]          
+
+            trip_json["passengers"] = [result.to_json() for result in results]        
 
         trips_as_passenger = UserTrip.query.filter(UserTrip.user_id == user_id).all()
         trips_pass_dict = [trip.to_json() for trip in trips_as_passenger] 
@@ -197,10 +196,7 @@ def search_rides():
     destination = request.form['destination']
     date = request.form['date']
     date_obj = datetime.strptime(date, "%m/%d/%Y").date()
-    # print(date)
-    # print(date_obj)
-
-
+ 
     # Data from query - list of trips from origin
 
     # Query for origin and destination, if none, then nearby trips
