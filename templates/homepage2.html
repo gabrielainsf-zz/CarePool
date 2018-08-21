@@ -10,6 +10,10 @@
 </head>
 <body>
 
+    <div>
+        <img id="profileImg" src="">
+    </div><br>
+
     <div id="todayTable""></div><br>
     <div id="upcomingTable"> </div><br>
     <div id="pastTable"></div><br>
@@ -18,7 +22,7 @@
         <table class="trip"></table>
     </div>
 
-     <style>
+    <style>
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
@@ -27,7 +31,7 @@
         padding: 5px;
         text-align: left;
     }
-</style>
+    </style>
 
 <script>
 
@@ -126,18 +130,36 @@
 
     function createPastTripsTable(pastTrips) {
 
+        for (let i = 0; i < pastTrips.length; i++) {
+
+        }
+
         let table = "<table>";
         table += "<caption>Past rides</caption>";
         table += "<th>Date:</th>";
         table += "<th>From:</th>";
         table += "<th>To:</th>";
+        table += "<th>Passengers:</th>";
         
         for (let i = 0; i < pastTrips.length; i++) {
+
+            let passenger_fn;
+            let passenger_img;
+
+            if (pastTrips[i].hasOwnProperty("passengers")) {
+                passengerList = pastTrips[i]["passengers"]
+
+                for (let j = 0; j < passengerList.length; j++) {
+                    passenger_fn = passengerList[j]["user_fname"]
+                    passenger_img = passengerList[j]["user_img"]
+                 }
+            }
 
             table += "<tr>";
             table += "<td>"+pastTrips[i]["date_of_trip"]+"</td>";
             table += "<td>"+pastTrips[i]["origin"]+"</td>";
             table += "<td>"+pastTrips[i]["destination"]+"</td>";
+            table += "<td>"+(passenger_fn != undefined ? passenger_fn : "No passengers yet!")+"</td>";
             table += "</tr>";
         }  
 
@@ -147,28 +169,38 @@
 
     function createPassTable(trips_passenger) {
 
-        // let table = "<table>";
         let table = "<caption>Rides as passenger</caption>";
         table += "<th>Date:</th>";
         table += "<th>From:</th>";
         table += "<th>To:</th>";
-        console.log(trips_passenger);
+        table += "<th>Driver:</th>";
+
         for (let i = 0; i < trips_passenger.length; i++) {
 
             table += "<tr>";
             table += "<td>"+trips_passenger[i]["date_of_trip"]+"</td>";
             table += "<td>"+trips_passenger[i]["origin"]+"</td>";
             table += "<td>"+trips_passenger[i]["destination"]+"</td>";
+            table += "<td>"+'driver'+"</td>";
             table += "</tr>";
         }
 
-        // table += "</table>";
         let tableList = document.getElementsByClassName("trips")[0]
-
         tableList.getElementsByClassName("trip")[0].innerHTML = table;
 
     }
 
+    function displayUserInfo(results) {
+        let img = results["user_info"]["user_profile_img"];
+        document.getElementById("profileImg").src = img;
+    }
+    
+
+    function getUserInfo() {
+            $.get('/user-info.json', displayUserInfo);
+        }
+
+    getUserInfo();
 
 </script>
 </body>

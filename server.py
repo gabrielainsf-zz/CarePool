@@ -66,13 +66,39 @@ def trips():
 
     if user_id:
         trips = Trip.query.filter(Trip.user_id == user_id).all()
-        trips_dict = [trip.to_json() for trip in trips]
+
+        # trips_dict = [trip.to_json() for trip in trips]
+
+        trips_dict = []
+
+
+        for trip in trips:
+            trip_json = trip.to_json()
+            trips_dict.append(trip_json)
+            results = UserTrip.query.filter(UserTrip.trip_id == trip_json["trip_id"]).all()
+            for result in results:
+                trip_json["passengers"] = [(result.to_json())]          
 
         trips_as_passenger = UserTrip.query.filter(UserTrip.user_id == user_id).all()
         trips_pass_dict = [trip.to_json() for trip in trips_as_passenger] 
-               
+
+
         return jsonify({'trips': trips_dict,
                         'trips_as_pass': trips_pass_dict})
+    else:
+        flash("Oops! You need to log in.")
+        return jsonify({'status': 'You"re not logged in'})
+
+@app.route('/user-info.json')
+def user_info():
+
+    user_id = session.get('user_id')
+
+    if user_id:
+        user_info = User.query.filter(Trip.user_id == user_id).first()
+        user_info = user_info.to_json()
+
+        return jsonify({'user_info': user_info})
     else:
         flash("Oops! You need to log in.")
         return jsonify({'status': 'You"re not logged in'})

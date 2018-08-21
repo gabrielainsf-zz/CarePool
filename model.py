@@ -105,11 +105,14 @@ class UserTrip(db.Model):
     def to_json(self):
         """Converts to JSON"""
 
+        datetime_str = self.trip.date_of_trip.strftime('%Y-%m-%d')
+
         return {'user_trip_id': self.user_trip_id,
                 'trip_id': self.trip_id,
                 'user_id': self.user_id,
-                'date_of_trip': self.trip.date_of_trip,
+                'date_of_trip': datetime_str,
                 'user_fname': self.user.fname,
+                'user_img': self.user.user_profile_img,
                 'origin': self.trip.origin,
                 'destination': self.trip.destination}
 
