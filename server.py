@@ -37,15 +37,10 @@ def index():
     if user_id:
         trips = Trip.query.filter(Trip.user_id == user_id).all()
         trips_as_passenger = UserTrip.query.filter(UserTrip.user_id == user_id).all()
-
-        return render_template('homepage.html',
-                                trips=trips,
-                                today=today,
-                                trips_as_passenger=trips_as_passenger,
-                                user_id=user_id)
+        return render_template('homepage.html')
     else:
         flash("Oops! You need to log in.")
-        return render_template('login_form.html')
+        return render_template('index.html')
 
 @app.route('/2')
 def index2():
@@ -103,10 +98,10 @@ def user_info():
         return jsonify({'status': 'You"re not logged in'})
 
 
-@app.route('/login')
-def display_login_form():
+# @app.route('/login')
+# def display_login_form():
 
-    return render_template('login_form.html')
+#     return render_template('login_form.html')
 
 
 @app.route('/login', methods=["POST"])
@@ -135,7 +130,7 @@ def login_process():
             session['user_id'] = user_id
             flash('Yay! You are logged in.')
 
-    return redirect('/2')
+    return redirect('/')
 
 @app.route('/add-ride')
 def add_trip():
@@ -353,8 +348,7 @@ def logout():
     del session['user_id']
     flash('Logged out!')
 
-    return redirect('/login')
-    # Later change to landing page
+    return redirect('/')
 
 
 if __name__ == "__main__":
