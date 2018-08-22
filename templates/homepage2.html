@@ -31,6 +31,12 @@
             <div id="home" class="tab-pane fade">
                 <br><br>
                 <p>Hello</p>
+
+<!--                 <form action="/notify" method="post">
+                    <input type="text" name="message">
+                    <input type="submit" value="message">
+                </form> -->
+
             </div>
             <div id="ridesAsDriver" class="tab-pane fade">
                     <div id="todayTable"></div>
@@ -46,32 +52,30 @@
         </div>
         </div>
 
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <form method="post">
-                  <div class="form-group">
-                    <label for="message-text" class="col-form-label">Message:</label>
-                    <textarea class="form-control" name="message" id="message-text"></textarea>
-                  </div>
-                </form>
+                <form action="/notify" method="post">
+                    <input type="text" name="message">
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send message</button>
+                <input type="submit" class="btn btn-primary" value="Message">
+                </form>
               </div>
             </div>
-            </div>
+          </div>
         </div>
-
-<script>
+    </div>
+    <script>
 
     function sortTripsByDate(results) {
      
@@ -175,9 +179,10 @@
                 table += "<td>"+trips[i]["origin"]+"</td>";
                 table += "<td>"+trips[i]["destination"]+"</td>";
                 table += "<td>"+(passengerFirstName != undefined ? `<img src=${passengerProfileImg}>` 
-                               + passengerFirstName  
-                               + '  <button type="button" class="btn btn-light btn-sm" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Message</button>'
-                                 : "No passengers yet!")
+                               + passengerFirstName
+                               + '     '
+                               + '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Message</button>'
+                               : "No passengers yet!")
 
                     +"</td>";
         
@@ -190,15 +195,6 @@
 
     }
 
-    $('#exampleModal').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget) // Button that triggered the modal
-      var recipient = button.data('whatever') // Extract info from data-* attributes
-      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-      var modal = $(this)
-      modal.find('.modal-title').text('New message to ' + recipient)
-      modal.find('.modal-body input').val(recipient)
-    })
 
    function createPassengerTripTable(trips, title, elementID) {
 

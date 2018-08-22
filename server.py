@@ -339,6 +339,9 @@ def notify_user():
         from_=twilioNum,
         body=msg)
 
+    flash('Message sent!')
+    return redirect('/2#home')
+
 
 @app.route('/logout')
 def logout():
