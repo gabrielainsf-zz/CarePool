@@ -332,7 +332,7 @@ def notify_user():
 
     client = Client(twilioSID, twilioAuthKey)
 
-    msg = request.form.get("msg")
+    msg = request.form.get("message")
 
     message = client.messages.create(
         to=myNum,
