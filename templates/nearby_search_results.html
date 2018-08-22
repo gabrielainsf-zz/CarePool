@@ -8,6 +8,7 @@
       {% for drop_off in drop_offs_nearby %}
 
         City: {{ drop_off }} <br>
+        Date: {{ date }} <br>
         Distance to {{ destination }}: {{ drop_offs_nearby[drop_off]['distance'] }} <br>
         Driver: {{ drop_offs_nearby[drop_off]['trip_info'].user.fname }} <br>
 

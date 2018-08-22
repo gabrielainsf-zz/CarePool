@@ -21,8 +21,8 @@
 
         
         <div class="container">
-        <ul class="nav nav-tabs">
-            <li class="active nav-item"><a data-toggle="tab" class="nav-link" href="#home">Home</a></li>
+        <ul class="nav nav-tabs" role="tabpanel">
+            <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#home">Home</a></li>
             <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsDriver">I'm Driving</a></li>
             <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsPassenger">I'm Joining</a></li>
         </ul>
@@ -31,11 +31,6 @@
             <div id="home" class="tab-pane fade">
                 <br><br>
                 <p>Hello</p>
-
-<!--                 <form action="/notify" method="post">
-                    <input type="text" name="message">
-                    <input type="submit" value="message">
-                </form> -->
 
             </div>
             <div id="ridesAsDriver" class="tab-pane fade">
@@ -57,14 +52,14 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Send message</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <form action="/notify" method="post">
-                    <input type="text" name="message">
+                <form action="/notify" method="post" class="form-group">
+                    <input type="text" class="form-control" name="message">
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -173,18 +168,19 @@
                     passengerProfileImg = passengerList[j]["userProfileImg"];
                 }
                 
-                table += "<tbody>"
+                table += "<tbody>";
                 table += "<tr>";
-                table += "<td>"+trips[i]["dateOfTrip"]+"</td>";
-                table += "<td>"+trips[i]["origin"]+"</td>";
-                table += "<td>"+trips[i]["destination"]+"</td>";
-                table += "<td>"+(passengerFirstName != undefined ? `<img src=${passengerProfileImg}>` 
-                               + passengerFirstName
-                               + '     '
-                               + '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Message</button>'
-                               : "No passengers yet!")
-
-                    +"</td>";
+                table += "<td>" + trips[i]["dateOfTrip"]+"</td>";
+                table += "<td>" + trips[i]["origin"]+"</td>";
+                table += "<td>" + trips[i]["destination"]+"</td>";
+                table += "<td>" + (passengerFirstName != undefined ? `<img 
+                                  src=${passengerProfileImg}>`
+                                +  '&nbsp; &nbsp;'
+                                +  passengerFirstName
+                                +  '&nbsp; &nbsp;'
+                                +  '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Message</button>'
+                               : "No passengers yet!");
+                                 + "</td>";
         
                 table += "</tr>";
             }  
@@ -214,11 +210,15 @@
                 let userProfileImg = trips[i]["userProfileImg"];
 
                 table += "<tr>";
-                table += "<td>"+trips[i]["dateOfTrip"]+"</td>";
-                table += "<td>"+trips[i]["origin"]+"</td>";
-                table += "<td>"+trips[i]["destination"]+"</td>";
-                table += "<td>"+trips[i]["userFirstName"]
-                               + `<img src="${userProfileImg}">`+"</td>";
+                table += "<td>" + trips[i]["dateOfTrip"]+"</td>";
+                table += "<td>" + trips[i]["origin"]+"</td>";
+                table += "<td>" + trips[i]["destination"]+"</td>";
+                table += "<td>" + `<img src="${userProfileImg}">`
+                                + '&nbsp; &nbsp;'
+                                + trips[i]["userFirstName"]
+                                + '&nbsp; &nbsp;'
+                                + '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Message</button>';
+                                + "</td>";
         
                 table += "</tr>";
             }  

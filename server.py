@@ -227,8 +227,6 @@ def search_rides():
 
             r = requests.get(base_url, params = payload)
 
-            # Will be a list of tuples with possible drop-off and distance from desired
-            # destination
             drop_off_distances = {};
 
             # Check the HTTP status code returned by the server. Only process the response, 
@@ -244,7 +242,7 @@ def search_rides():
                         if cell['status'] == 'OK':
                             # Dictionary of drop off distances to key in by city
                             drop_off_distances[dst] = cell['distance']['text']
-                            # print('{} to {}: {}.'.format(src, dst, cell['distance']['text']))
+                            print('{} to {}: {}.'.format(src, dst, cell['distance']['text']))
                         else:
                             print('{} to {}: status = {}'.format(src, dst, cell['status']))
 
@@ -252,8 +250,10 @@ def search_rides():
                 try:
                     return float(value)
                 except ValueError:
-                    # return float(value)
                     return int(value.replace(",", ""))
+
+            print("\n\ndrop off distances:")
+            print(drop_off_distances)
 
             for drop_off in drop_off_distances:
                 # Convert str to float
@@ -263,7 +263,7 @@ def search_rides():
                 kms = ' '.join(kilometers)
                 drop_off_distances[drop_off] = convert_to_int_float(kms)
 
-            # Remove drop-offs with greater distance than 40kms
+            # Remove drop-offs with greater distance than 45kms
             # Loop through listified of dict to avoid RunTime error
             for drop_off, distance in list(drop_off_distances.items()):
                 if distance > 45:
@@ -275,12 +275,18 @@ def search_rides():
             # they will be reassigned
             for drop_off in drop_off_distances:     
                 for trip in trips:
-                    if trip.destination == drop_off:
+     
+                    drop_off_list = drop_off.split(',')
+                    trip.destination_list = trip.destination.split(',')
+
+                    if trip.destination[0] == drop_off[0]:
                         drop_offs_nearby[drop_off] = {'distance': drop_off_distances[drop_off],
                                                       'trip_info': trip,
                                                       'trip_id': trip.trip_id}
             # Example outpout: {'Los Angeles, CA, USA': {'trip_id': 103, 'distance': 1.0},
             #                   'Anaheim, CA, USA': {'trip_id': 104, 'distance': 42.2}}
+            print("\n\ndrop off nearby:")
+            print(drop_offs_nearby)
 
             return render_template('nearby_search_results.html',
                                     trips=trips,
@@ -323,9 +329,6 @@ def create_user_trip():
         flash("Sorry, ride is already full!")
         return redirect('/')
 
-# @app.route('/notify', methods=["GET"])
-    
-#     return render_template('send_notification.html')
 
 @app.route('/notify', methods=["POST"])
 def notify_user():
@@ -340,7 +343,7 @@ def notify_user():
         body=msg)
 
     flash('Message sent!')
-    return redirect('/2#home')
+    return redirect('/2')
 
 
 @app.route('/logout')
