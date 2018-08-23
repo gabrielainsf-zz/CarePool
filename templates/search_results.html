@@ -2,11 +2,10 @@
 
 {% block content %}
 
-  <h2>Available rides from {{ origin }} to {{ destination }} on {{ date }} :</h2>
+  <h2>Available rides from {{ origin }} to {{ destination }} on {{ date_desired }} :</h2>
 
   <div>
     {% for trip in trips %}
-      {% if ((date_obj == trip.date_of_trip) and (destination == trip.destination)) %}
 
         Date: {{ trip.date_of_trip }} <br>
         Driver: {{ trip.user.fname }} <br>
@@ -17,7 +16,7 @@
           <input type="submit" value="Join ride!">
           <input type="hidden" value={{ trip.trip_id }} name="trip">
         </form>
-      {% endif %}
+
     {% endfor %}
   </div>
 

@@ -2,13 +2,13 @@
 
 {% block content %}
 
-  <h2>Sorry! There aren't rides to {{ destination }}, but here are some rides nearby: </h2>
+  <h2>Sorry! There aren't rides to {{ destination }} on {{ date_desired }}, but here are some rides nearby: </h2>
 
   <div>
       {% for drop_off in drop_offs_nearby %}
 
         City: {{ drop_off }} <br>
-        Date: {{ date }} <br>
+        Date: {{ drop_offs_nearby[drop_off]['date'] }} <br>
         Distance to {{ destination }}: {{ drop_offs_nearby[drop_off]['distance'] }} <br>
         Driver: {{ drop_offs_nearby[drop_off]['trip_info'].user.fname }} <br>
 
@@ -19,6 +19,7 @@
           <input type="hidden" value={{ drop_offs_nearby[drop_off]['trip_id'] }} name="trip">
         </form>
         <br>
+
       {% endfor %}
   </div>
 

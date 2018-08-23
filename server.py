@@ -4,7 +4,7 @@ from flask import json, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Trip, UserTrip
 from googlemaps import convert
-from datetime import datetime
+from datetime import datetime, date
 from twilio.rest import Client
 import requests
 import os
@@ -164,16 +164,20 @@ def search_rides():
     """Display search rides results."""
     origin = request.form['origin']
     destination = request.form['destination']
-    date = request.form['date']
-    date_obj = datetime.strptime(date, "%m/%d/%Y").date()
+    date_desired = request.form['date']
+    date_obj = datetime.strptime(date_desired, "%m/%d/%Y").date()
+    today = date.today()
+    print(today)
 
     # Query for origin and destination, if none, then nearby trips
     trips = Trip.query.filter(Trip.origin == origin,
-                              Trip.destination == destination).all()
+                              Trip.destination == destination,
+                              Trip.date_of_trip >= today).all()
 
     if not trips:
         # Query trips from origin
-        trips = Trip.query.filter(Trip.origin == origin).all()
+        trips = Trip.query.filter(Trip.origin == origin,
+                                  Trip.date_of_trip >= today ).all()
 
         if not trips:
             flash("Sorry, no rides were found. " +
@@ -252,7 +256,8 @@ def search_rides():
                     if trip.destination[0] == drop_off[0]:
                         drop_offs_nearby[drop_off] = {'distance': drop_off_distances[drop_off],
                                                       'trip_info': trip,
-                                                      'trip_id': trip.trip_id}
+                                                      'trip_id': trip.trip_id,
+                                                      'date': trip.date_of_trip}
             # Example outpout: {'Los Angeles, CA, USA': {'trip_id': 103, 'distance': 1.0},
             #                   'Anaheim, CA, USA': {'trip_id': 104, 'distance': 42.2}}
 
@@ -261,6 +266,7 @@ def search_rides():
                                     origin=origin,
                                     destination=destination,
                                     date=date,
+                                    date_desired=date_desired,
                                     date_obj=date_obj,
                                     drop_offs_nearby=drop_offs_nearby)
     else:
@@ -268,6 +274,7 @@ def search_rides():
                                 trips=trips,
                                 origin=origin,
                                 destination=destination,
+                                date_desired=date_desired,
                                 date=date,
                                 date_obj=date_obj)
 
