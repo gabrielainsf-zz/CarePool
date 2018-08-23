@@ -68,21 +68,21 @@ class FlaskTestsLoggedIn(unittest.TestCase):
         example_data()
 
     def test_login(self):
-        """Test login page."""
+        """Test login page in homepage"""
 
         result = self.client.post('/login',
                                   data={"email": "jo@bama.com",
                                         "password": "jo@bama.com"},
                                   follow_redirects=True)
-        self.assertIn(b"Your upcoming rides", result.data)
-        self.assertNotIn(b"Log In:", result.data)
+        self.assertIn(b"Welcome", result.data)
+        self.assertNotIn(b"Register", result.data)
 
     def test_homepage(self):
-        """Test homepage if user is logged in. Should not see upcoming rides."""
+        """Test that landing page is only visible if user is not logged in."""
 
         result = self.client.get('/')
-        self.assertIn(b"Welcome", result.data)
-        self.assertNotIn(b"Upcoming rides", result.data)
+        self.assertIn(b"Register", result.data)
+        self.assertNotIn(b"Welcome", result.data)
 
 
 class FlaskTestsLoggedOut(unittest.TestCase):
@@ -98,7 +98,7 @@ class FlaskTestsLoggedOut(unittest.TestCase):
         """Test homepage if user is logged out."""
 
         result = self.client.get('/', follow_redirects=True)
-        self.assertIn(b"Log In:", result.data)
+        self.assertIn(b"Register", result.data)
 
     def test_add_ride(self):
         """Test add ride page when user is not logged in. User should not be able
@@ -106,7 +106,7 @@ class FlaskTestsLoggedOut(unittest.TestCase):
 
         result = self.client.get('/add-ride', follow_redirects=True)
         self.assertNotIn(b"Add a ride", result.data)
-        self.assertIn(b"Log In:", result.data)
+        self.assertIn(b"Register", result.data)
 
     def test_search_rides(self):
         """Test request ride page when user is not logged in. User should not be
@@ -114,7 +114,7 @@ class FlaskTestsLoggedOut(unittest.TestCase):
 
         result = self.client.get('/search-rides', follow_redirects=True)
         self.assertNotIn(b"Starting", result.data)
-        self.assertIn(b"Log In:", result.data)
+        self.assertIn(b"Register", result.data)
 
 if __name__ == "__main__":
     unittest.main()

@@ -19,8 +19,18 @@
             <img id="profileImg" src="">
         </div><br>
 
-        
         <div class="container">
+
+        <br>
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <div>{{ message }}</div>
+                <br>
+            {% endfor %}
+        {% endwith %}
+
+        <br><h2>Welcome!</h2>
+
         <ul class="nav nav-tabs" role="tabpanel">
             <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#home">Home</a></li>
             <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsDriver">I'm Driving</a></li>

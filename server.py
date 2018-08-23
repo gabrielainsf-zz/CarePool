@@ -39,20 +39,8 @@ def index():
         trips_as_passenger = UserTrip.query.filter(UserTrip.user_id == user_id).all()
         return render_template('homepage.html')
     else:
-        flash("Oops! You need to log in.")
         return render_template('index.html')
 
-@app.route('/2')
-def index2():
-    """Display homepage built with JavaScript instead of Jinja templating."""
-
-    user_id = session.get('user_id')
-
-    if user_id:
-        return render_template('homepage2.html')
-    else:
-        flash("Oops! You need to log in.")
-        return jsonify({'status': 'You"re not logged in'})
 
 @app.route('/trips.json')
 def trips():
@@ -98,12 +86,6 @@ def user_info():
         return jsonify({'status': 'You"re not logged in'})
 
 
-# @app.route('/login')
-# def display_login_form():
-
-#     return render_template('login_form.html')
-
-
 @app.route('/login', methods=["POST"])
 def login_process():
 
@@ -142,7 +124,7 @@ def add_trip():
         return render_template('add_ride.html', key=googlePlaceKey)
     else:
         flash("You need to be logged in to do that.")
-        return redirect('/login')
+        return redirect('/')
 
 @app.route('/add-ride', methods=["POST"])
 def add_trip_process():
@@ -180,7 +162,7 @@ def search_rides_form():
         return render_template('search_form.html', key=googlePlaceKey)
     else:
         flash("You need to be logged in to do that.")
-        return redirect('/login')
+        return redirect('/')
 
 
 @app.route('/search-rides', methods=["POST"])
