@@ -78,11 +78,11 @@ class FlaskTestsLoggedIn(unittest.TestCase):
         self.assertNotIn(b"Register", result.data)
 
     def test_homepage(self):
-        """Test that landing page is only visible if user is not logged in."""
+        """Test that register and log-in page is only visible if user is not logged in."""
 
         result = self.client.get('/')
-        self.assertIn(b"Register", result.data)
-        self.assertNotIn(b"Welcome", result.data)
+        self.assertIn(b"Welcome", result.data)
+        self.assertNotIn(b"Register", result.data)
 
 
 class FlaskTestsLoggedOut(unittest.TestCase):
