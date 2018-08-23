@@ -7,9 +7,9 @@ from model import UserTrip
 from server import app
 from random import choice
 
+
 def load_users():
     """Load users from MOCK_USER_DATA into database."""
-
     print("Users")
 
     # Delete all rows in table, so if we need to run this a second time,
@@ -23,7 +23,7 @@ def load_users():
 
         user_id = row_list[0]
         # print(user_id)
-        first_name = row_list[1] 
+        first_name = row_list[1]
         last_name = row_list[2]
         email = row_list[3]
         gender = row_list[4]
@@ -43,13 +43,12 @@ def load_users():
                     user_profile_img=profile_photo,
                     user_social_media=social_media)
 
-
-        db.session.add(user)
+    db.session.add(user)
     db.session.commit()
+
 
 def load_trips():
     """Load trips from MOCK_TRIP_DATA into database."""
-
     print("Trips")
 
     Trip.query.delete()
@@ -72,35 +71,19 @@ def load_trips():
             trip = Trip(trip_id=trip_id,
                         date_of_trip=date_trip_str,
                         max_passengers=max_passengers,
-                        num_passengers = num_passengers,
+                        num_passengers=num_passengers,
                         origin=origin,
                         destination=destination,
                         willing_to_stop=(willing_to_stop),
                         trip_cost=trip_cost,
                         user_id=user_id)
-        else:
-            random_users = User.query.all()
-            user_id = choice(random_user)
-            trip = Trip(trip_id=trip_id,
-                        date_of_trip=date_trip_str,
-                        max_passengers=max_passengers,
-                        num_passengers = num_passengers,
-                        origin=origin,
-                        destination=destination,
-                        trip_cost=trip_cost,
-                        user_id=user_id)
 
-
-
-
-        db.session.add(trip)
-
+    db.session.add(trip)
     db.session.commit()
 
 
 def load_usertrips():
     """Load user trips."""
-
     print("User Trips")
 
     UserTrip.query.delete()
@@ -111,9 +94,9 @@ def load_usertrips():
     db.session.add(user_trip)
     db.session.commit()
 
-def set_val_user_id():
-    """Set value for the next user_id after seeding database"""
 
+def set_val_user_id():
+    """Set value for the next user_id after seeding database."""
     # Get the Max user_id in the database
     result = db.session.query(func.max(User.user_id)).one()
     max_id = int(result[0])
@@ -123,9 +106,9 @@ def set_val_user_id():
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
 
-def set_val_trip_id():
-    """Set value for the next trip after seeding db"""
 
+def set_val_trip_id():
+    """Set value for the next trip after seeding db."""
     result = db.session.query(func.max(Trip.trip_id)).one()
     max_id = int(result[0])
 

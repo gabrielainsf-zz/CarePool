@@ -1,10 +1,10 @@
 from jinja2 import StrictUndefined
-from flask import Flask, render_template, redirect, request, flash, session, json, jsonify
+from flask import Flask, render_template, redirect, request, flash, session
+from flask import json, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Trip, UserTrip
-from datetime import datetime, date
 from googlemaps import convert
-from googlemaps.convert import as_list
+from datetime import datetime
 from twilio.rest import Client
 import requests
 import os
@@ -26,17 +26,13 @@ myNum = os.environ['MY_NUM']
 # error.
 app.jinja_env.undefined = StrictUndefined
 
-    
+
 @app.route('/')
 def index():
     """Display Homepage."""
-
     user_id = session.get('user_id')
-    today = date.today()
 
     if user_id:
-        trips = Trip.query.filter(Trip.user_id == user_id).all()
-        trips_as_passenger = UserTrip.query.filter(UserTrip.user_id == user_id).all()
         return render_template('homepage.html')
     else:
         return render_template('index.html')
@@ -45,7 +41,6 @@ def index():
 @app.route('/trips.json')
 def trips():
     """Return trips where user is a driver or passenger."""
-
     user_id = session.get('user_id')
 
     if user_id:
@@ -57,13 +52,14 @@ def trips():
             trip_json = trip.to_json()
             trips_dict.append(trip_json)
 
-            results = UserTrip.query.filter(UserTrip.trip_id == trip_json["tripId"]).all()
+            results = UserTrip.query.filter(UserTrip.trip_id ==
+                                            trip_json["tripId"]).all()
 
-            trip_json["passengers"] = [result.to_json() for result in results]        
+            trip_json["passengers"] = [result.to_json() for result in results]
 
-        trips_as_passenger = UserTrip.query.filter(UserTrip.user_id == user_id).all()
-        trips_pass_dict = [trip.to_json() for trip in trips_as_passenger] 
-
+        trips_as_passenger = UserTrip.query.filter(UserTrip.user_id ==
+                                                   user_id).all()
+        trips_pass_dict = [trip.to_json() for trip in trips_as_passenger]
 
         return jsonify({'trips': trips_dict,
                         'tripsAsPassenger': trips_pass_dict})
@@ -71,9 +67,10 @@ def trips():
         flash("Oops! You need to log in.")
         return jsonify({'status': 'You"re not logged in'})
 
+
 @app.route('/user-info.json')
 def user_info():
-
+    """Serialized information for front-end."""
     user_id = session.get('user_id')
 
     if user_id:
@@ -87,18 +84,16 @@ def user_info():
 
 
 @app.route('/login', methods=["POST"])
-def login_process():
-
+def log_user_in():
+    """Log the user in."""
     email = request.form['email']
     password = request.form['password']
 
     user_by_email = User.query.filter(User.email == email).first()
 
-
     # If email is not found in db
     if user_by_email is None:
         flash('Oops! You need to register first.')
-      
     # If email is found in db
     elif user_by_email is not None:
         user_id = user_by_email.user_id
@@ -114,10 +109,10 @@ def login_process():
 
     return redirect('/')
 
+
 @app.route('/add-ride')
 def add_trip():
-    """Adds ride to the rides table."""
-
+    """Add ride to the rides table."""
     user_id = session.get('user_id')
 
     if user_id:
@@ -126,16 +121,16 @@ def add_trip():
         flash("You need to be logged in to do that.")
         return redirect('/')
 
+
 @app.route('/add-ride', methods=["POST"])
 def add_trip_process():
-    """Adds a trip to the database."""
-
+    """Add a trip to the database."""
     trip_date = request.form['date']
     trip_origin = request.form['origin']
     trip_destination = request.form['destination']
     max_passengers = request.form['max_passengers']
     trip_cost = request.form['cost']
-    willing_to_stop = request.form['newleg'] in ('True') 
+    willing_to_stop = request.form['newleg'] in ('True')
     user_id = session['user_id']
 
     new_trip = Trip(date_of_trip=trip_date,
@@ -154,10 +149,9 @@ def add_trip_process():
 
 @app.route('/search-rides')
 def search_rides_form():
-
+    """Display search ride form."""
     user_id = session.get('user_id')
 
-    # If user is in session
     if user_id:
         return render_template('search_form.html', key=googlePlaceKey)
     else:
@@ -167,14 +161,11 @@ def search_rides_form():
 
 @app.route('/search-rides', methods=["POST"])
 def search_rides():
-
-    # Data from form
+    """Display search rides results."""
     origin = request.form['origin']
     destination = request.form['destination']
     date = request.form['date']
     date_obj = datetime.strptime(date, "%m/%d/%Y").date()
- 
-    # Data from query - list of trips from origin
 
     # Query for origin and destination, if none, then nearby trips
     trips = Trip.query.filter(Trip.origin == origin,
@@ -185,13 +176,21 @@ def search_rides():
         trips = Trip.query.filter(Trip.origin == origin).all()
 
         if not trips:
-            flash("Sorry, no rides were found. Would you like to try another search?")
+            flash("Sorry, no rides were found. " +
+                  "Would you like to try another search?")
             return redirect('/search-rides')
 
         else:
             drop_offs = []
             for trip in trips:
                 drop_offs.append(trip.destination)
+
+            def convert_to_int_float(value):
+                """Convert str to float/int."""
+                try:
+                    return float(value)
+                except ValueError:
+                    return int(value.replace(",", ""))
 
             # Google Distance Matrix API set up
             base_url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
@@ -202,14 +201,15 @@ def search_rides():
                 "destinations": convert.location_list(destinations)
             }
 
-            r = requests.get(base_url, params = payload)
+            r = requests.get(base_url, params=payload)
 
-            drop_off_distances = {};
+            drop_off_distances = {}
 
-            # Check the HTTP status code returned by the server. Only process the response, 
-            # if the status code is 200 (OK in HTTP terms).
+            # Check the HTTP status code returned by the server.
+            # Only process the response, if the status code is 200.
             if r.status_code != 200:
-                print('HTTP status code {} received, program terminated.'.format(r.status_code))
+                print('HTTP status code {} received, program terminated.'
+                      .format(r.status_code))
             else:
                 x = json.loads(r.text)
                 for isrc, src in enumerate(x['origin_addresses']):
@@ -219,18 +219,11 @@ def search_rides():
                         if cell['status'] == 'OK':
                             # Dictionary of drop off distances to key in by city
                             drop_off_distances[dst] = cell['distance']['text']
-                            print('{} to {}: {}.'.format(src, dst, cell['distance']['text']))
+                            # print('{} to {}: {}.'
+                            #       .format(src, dst, cell['distance']['text']))
                         else:
-                            print('{} to {}: status = {}'.format(src, dst, cell['status']))
-
-            def convert_to_int_float(value):
-                try:
-                    return float(value)
-                except ValueError:
-                    return int(value.replace(",", ""))
-
-            print("\n\ndrop off distances:")
-            print(drop_off_distances)
+                            print('{} to {}: status = {}'
+                                  .format(src, dst, cell['status']))
 
             for drop_off in drop_off_distances:
                 # Convert str to float
@@ -245,14 +238,14 @@ def search_rides():
             for drop_off, distance in list(drop_off_distances.items()):
                 if distance > 45:
                     drop_off_distances.pop(drop_off)
-            
+
             # Dictionary that will store trip id, distance
             drop_offs_nearby = {}
             # Consider if there are multiple trips, what happens then to trip_ids since
             # they will be reassigned
-            for drop_off in drop_off_distances:     
+            for drop_off in drop_off_distances:
                 for trip in trips:
-     
+
                     drop_off_list = drop_off.split(',')
                     trip.destination_list = trip.destination.split(',')
 
@@ -262,8 +255,6 @@ def search_rides():
                                                       'trip_id': trip.trip_id}
             # Example outpout: {'Los Angeles, CA, USA': {'trip_id': 103, 'distance': 1.0},
             #                   'Anaheim, CA, USA': {'trip_id': 104, 'distance': 42.2}}
-            print("\n\ndrop off nearby:")
-            print(drop_offs_nearby)
 
             return render_template('nearby_search_results.html',
                                     trips=trips,
@@ -283,7 +274,7 @@ def search_rides():
 
 @app.route('/join-ride', methods=["POST"])
 def create_user_trip():
-
+    """Add user to ride in the database."""
     trip_id = request.form['trip']
     user_id = session.get('user_id')
 
@@ -291,7 +282,7 @@ def create_user_trip():
 
     # Ensure there is still space before adding to current passengers
     if trip.num_passengers < trip.max_passengers:
-        
+
         trip.num_passengers += 1
 
         new_user_trip = UserTrip(trip_id=trip_id,
@@ -309,24 +300,20 @@ def create_user_trip():
 
 @app.route('/notify', methods=["POST"])
 def notify_user():
-
+    """Send text message to passenger/driver with Twilio API."""
     client = Client(twilioSID, twilioAuthKey)
 
     msg = request.form.get("message")
 
-    message = client.messages.create(
-        to=myNum,
-        from_=twilioNum,
-        body=msg)
+    client.messages.create(to=myNum, from_=twilioNum, body=msg)
 
     flash('Message sent!')
-    return redirect('/2')
+    return redirect('/')
 
 
 @app.route('/logout')
 def logout():
     """Log user out."""
-
     del session['user_id']
     flash('Logged out!')
 

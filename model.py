@@ -13,11 +13,11 @@ db = SQLAlchemy()
 ##############################################################################
 # Model definitions
 
+
 class User(db.Model):
     """User information."""
 
     __tablename__ = "users"
-
 
     # Log-in information
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
@@ -34,8 +34,7 @@ class User(db.Model):
     # phone_number = db.Column(db.Numeric(12), nullable=True)
 
     def to_json(self):
-        """Converts to JSON"""
-
+        """Serialize data."""
         return {'user_id': self.user_id,
                 'email': self.email,
                 'password': self.password,
@@ -46,11 +45,11 @@ class User(db.Model):
                 'user_profile_img': self.user_profile_img,
                 'user_social_media': self.user_social_media}
 
+
 class Trip(db.Model):
     """Trip information."""
 
     __tablename__ = "trips"
-
 
     trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     date_of_trip = db.Column(db.Date, nullable=False)
@@ -70,8 +69,7 @@ class Trip(db.Model):
     user = db.relationship("User", backref=db.backref("trips", order_by=trip_id))
 
     def to_json(self):
-        """Converts to JSON"""
-
+        """Serialize data."""
         datetime_str = self.date_of_trip.strftime('%Y-%m-%d')
 
         return {'tripId': self.trip_id,
@@ -86,11 +84,11 @@ class Trip(db.Model):
                 'userFirstName': self.user.fname,
                 'userProfileImg': self.user.user_profile_img}
 
+
 class UserTrip(db.Model):
     """User (passenger) has joined a trip."""
 
     __tablename__ = "user_trips"
-
 
     user_trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 
@@ -105,8 +103,7 @@ class UserTrip(db.Model):
     user = db.relationship("User", backref=db.backref("user_trips", order_by=user_trip_id))
 
     def to_json(self):
-        """Converts to JSON"""
-
+        """Serialize data."""
         datetime_str = self.trip.date_of_trip.strftime('%Y-%m-%d')
 
         return {'userTripId': self.user_trip_id,
@@ -118,21 +115,21 @@ class UserTrip(db.Model):
                 'origin': self.trip.origin,
                 'destination': self.trip.destination}
 
-
-
 ##############################################################################
 # Helper functions
 
+
 def connect_to_db(app, db_uri="postgresql:///rideshares"):
     """Connect the database to our Flask app."""
-
     # Configure to use our PstgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
 
+
 def example_data():
+    """Provide example data for tests.py."""
     user = User(fname="Jo",
                 lname="Bama",
                 email="jo@bama.com",
@@ -141,7 +138,7 @@ def example_data():
                 password="jo@bama.com",
                 user_profile_img="https://robohash.org/enimsolutaqui.png?size=50x50&set=set1",
                 user_social_media="twitter.com")
-    
+
     db.session.add(user)
     db.session.commit()
 
@@ -152,4 +149,3 @@ if __name__ == "__main__":
     from server import app
     connect_to_db(app)
     print("Connected to DB.")
-
