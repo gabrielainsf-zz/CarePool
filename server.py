@@ -1,3 +1,8 @@
+"""
+I am a docstring.
+
+More details here.
+"""
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 from flask import json, jsonify
@@ -15,6 +20,7 @@ app = Flask(__name__)
 app.secret_key = "ABC"
 
 # Google Place key
+# ONE_EXAMPLE format edit
 googlePlaceKey = os.environ['GOOGLE_PLACES_KEY']
 twilioSID = os.environ['TWILIO_SID']
 twilioAuthKey = os.environ['TWILIO_AUTH_KEY']
@@ -177,7 +183,7 @@ def search_rides():
     if not trips:
         # Query trips from origin
         trips = Trip.query.filter(Trip.origin == origin,
-                                  Trip.date_of_trip >= today ).all()
+                                  Trip.date_of_trip >= today).all()
 
         if not trips:
             flash("Sorry, no rides were found. " +
@@ -185,24 +191,16 @@ def search_rides():
             return redirect('/search-rides')
 
         else:
-            drop_offs = []
-            for trip in trips:
-                drop_offs.append(trip.destination)
 
-            def convert_to_int_float(value):
-                """Convert str to float/int."""
-                try:
-                    return float(value)
-                except ValueError:
-                    return int(value.replace(",", ""))
+            trips_by_id = {trip.trip_id: trip for trip in trips}
+            possible_destinations = [trip.destination for trip in trips]
 
             # Google Distance Matrix API set up
-            base_url = 'https://maps.googleapis.com/maps/api/distancematrix/json?'
-            origins = destination
-            destinations = drop_offs
+            base_url = ('https://maps.googleapis.com/maps/api/distancematrix/'
+                        'json?')
             payload = {
-                "origins": convert.location_list(origins),
-                "destinations": convert.location_list(destinations)
+                "origins": convert.location_list(destination),
+                "destinations": convert.location_list(possible_destinations)
             }
 
             r = requests.get(base_url, params=payload)
@@ -215,54 +213,35 @@ def search_rides():
                 print('HTTP status code {} received, program terminated.'
                       .format(r.status_code))
             else:
-                x = json.loads(r.text)
-                for isrc, src in enumerate(x['origin_addresses']):
-                    for idst, dst in enumerate(x['destination_addresses']):
-                        row = x['rows'][isrc]
-                        cell = row['elements'][idst]
-                        if cell['status'] == 'OK':
-                            # Dictionary of drop off distances to key in by city
-                            drop_off_distances[dst] = cell['distance']['text']
-                            # print('{} to {}: {}.'
-                            #       .format(src, dst, cell['distance']['text']))
-                        else:
-                            print('{} to {}: status = {}'
-                                  .format(src, dst, cell['status']))
+                response_dict = json.loads(r.text)
+                for offset, trip in enumerate(trips):
+                    cell = response_dict['rows'][0]['elements'][offset]
+                    if cell['status'] == 'OK':
+                        # Dictionary of drop off distances to key in by trip_id
+                        drop_off_distances[trip.trip_id] = cell['distance']['value']
+                        # print('{} to {}: {}.'
+                        #       .format(src, dst, cell['distance']['text']))
+                    else:
+                        print('{} to {}: status = {}'
+                              .format(origin, dst, cell['status']))
 
-            for drop_off in drop_off_distances:
-                # Convert str to float
-                kilometers = drop_off_distances[drop_off]
-                kilometers = kilometers.split(' ')
-                kilometers.pop(1)
-                kms = ' '.join(kilometers)
-                drop_off_distances[drop_off] = convert_to_int_float(kms)
+            # print(drop_off_distances)
+            # print(possible_destinations)
 
-            # Remove drop-offs with greater distance than 45kms
-            # Loop through listified of dict to avoid RunTime error
-            for drop_off, distance in list(drop_off_distances.items()):
-                if distance > 45:
-                    drop_off_distances.pop(drop_off)
+            drop_off_distances = {key:value for key, value in drop_off_distances
+                                  .items() if value <= 72420}
 
-            # Dictionary that will store trip id, distance
+            # print(drop_off_distances)
+
             drop_offs_nearby = {}
-            # Consider if there are multiple trips, what happens then to trip_ids since
-            # they will be reassigned
-            for drop_off in drop_off_distances:
-                for trip in trips:
 
-                    drop_off_list = drop_off.split(',')
-                    trip.destination_list = trip.destination.split(',')
+            for trip_idx in drop_off_distances:
+                trip = trips_by_id[trip_idx]
+                drop_offs_nearby[trip_idx] = trip 
 
-                    if trip.destination[0] == drop_off[0]:
-                        drop_offs_nearby[drop_off] = {'distance': drop_off_distances[drop_off],
-                                                      'trip_info': trip,
-                                                      'trip_id': trip.trip_id,
-                                                      'date': trip.date_of_trip}
-            # Example outpout: {'Los Angeles, CA, USA': {'trip_id': 103, 'distance': 1.0},
-            #                   'Anaheim, CA, USA': {'trip_id': 104, 'distance': 42.2}}
+            # print(drop_offs_nearby)
 
             return render_template('nearby_search_results.html',
-                                    trips=trips,
                                     origin=origin,
                                     destination=destination,
                                     date=date,
