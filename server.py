@@ -191,7 +191,6 @@ def search_rides():
             return redirect('/search-rides')
 
         else:
-
             trips_by_id = {trip.trip_id: trip for trip in trips}
             possible_destinations = [trip.destination for trip in trips]
 
@@ -207,8 +206,6 @@ def search_rides():
 
             drop_off_distances = {}
 
-            # Check the HTTP status code returned by the server.
-            # Only process the response, if the status code is 200.
             if r.status_code != 200:
                 print('HTTP status code {} received, program terminated.'
                       .format(r.status_code))
@@ -237,7 +234,7 @@ def search_rides():
 
             for trip_idx in drop_off_distances:
                 trip = trips_by_id[trip_idx]
-                drop_offs_nearby[trip_idx] = trip 
+                drop_offs_nearby[trip_idx] = trip
 
             # print(drop_offs_nearby)
 

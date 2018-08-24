@@ -45,7 +45,11 @@
                 <br><br>
                 <p>Hello</p>
 
-                <canvas id="myChart"></canvas>
+                <div class="row">
+                    <div class="col-6">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                </div>
 
             </div>
             <div id="ridesAsDriver" class="tab-pane fade">
@@ -260,8 +264,6 @@
 
     // ChartJS
     function organizeData(trips) {
-        let origins = [];
-        let destinations = [];
 
         let destinationsObj = {};
 
@@ -275,18 +277,33 @@
             } 
         }
 
-        console.log(destinationsObj)
+        let cities = [];
+        let counts = [];
+        let colors = [];
+
+        let generateBackgroundColors = function() {
+            let r = Math.floor(Math.random() * 255);
+            let g = Math.floor(Math.random() * 255);
+            let b = Math.floor(Math.random() * 255);
+
+            return `rgb(${r}, ${b}, ${g})`;
+        };
+
+        for (city in destinationsObj) {
+            cities.push(city);
+            counts.push(destinationsObj[city]);
+            colors.push(generateBackgroundColors());
+        }
 
         let ctx = document.getElementById("myChart").getContext("2d")
 
         data = {
             datasets: [{
-                data: [10, 20, 80]
+                data: counts,
+                backgroundColor: colors
             }],
 
-            // These labels appear in the legend and in the tooltips when hovering different arcs
-            labels: [
-            ]
+            labels: cities
         };
 
         let myDoughnutChart = new Chart(ctx, {
@@ -295,7 +312,6 @@
             options: {}
         });
     }
-
 
 </script>
 
