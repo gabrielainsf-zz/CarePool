@@ -105,7 +105,7 @@ def log_user_in():
 
         elif email == user_by_email.email and password == user_password:
             session['user_id'] = user_id
-            flash('Yay! You are logged in.')
+            flash('Logged in successfully')
 
     return redirect('/')
 
