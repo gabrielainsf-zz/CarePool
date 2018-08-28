@@ -1,3 +1,5 @@
+"""This module holds the test classes."""
+
 import unittest
 from server import app
 from model import connect_to_db, db, example_data

@@ -1,6 +1,10 @@
-"""(' Sends request to Google Distance Matrix API and filters through the
- response to return possible drop-off locations.')
 """
+Send request to Google Distance Matrix API and filter results.
+
+The function sends a request to the Google Distance Matrix API and filters
+through the response to return possible drop-off locations under 45kms.
+"""
+import requests
 from googlemaps import convert
 from flask import json
 

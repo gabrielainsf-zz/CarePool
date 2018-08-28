@@ -11,7 +11,11 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
-
+    <script src="/static/sortTrips.js"></script>
+    <script src="/static/destinationsChart.js"></script>
+    <script src="/static/userAsPassengerTable.js"></script>
+    <script src="/static/userAsDriverTable.js"></script>
+<!--     <script src="/static/displayPassengers.js"></script> -->
 
 </head>
 <body>
@@ -91,227 +95,23 @@
     </div>
     <script>
 
-    function sortTripsByDate(results) {
-     
-        const { trips, tripsAsPassenger } = results;
-
-        let todaysDate = new Date()
-        let todaysDateUTC = Date.UTC(todaysDate.getUTCFullYear(),
-                                     todaysDate.getUTCMonth(),
-                                     todaysDate.getUTCDate())
-       
-        let upcomingTrips = [];
-        let pastTrips = [];
-        let todaysTrips = [];
-
-        let passengerUpcomingTrips = [];
-        let passengerPastTrips = [];
-        let passengerTodaysTrips = [];
-
-        for (let i = 0; i < trips.length; i++) {
-            
-            date = new Date(trips[i]["dateOfTrip"]);
-            utc_date = Date.UTC(date.getUTCFullYear(),
-                                date.getUTCMonth(),
-                                date.getUTCDate());
-    
-
-            if (utc_date == todaysDateUTC) {
-                todaysTrips.push(trips[i]);
-            } else if (utc_date > todaysDateUTC) {
-                upcomingTrips.push(trips[i]);
-            } else if (utc_date < todaysDateUTC) {
-                pastTrips.push(trips[i]);
-            }
-        }
-
-        for (let i = 0; i < tripsAsPassenger.length; i++) {
-            
-            date = new Date(tripsAsPassenger[i]["dateOfTrip"]);
-            utc_date = Date.UTC(date.getUTCFullYear(),
-                                date.getUTCMonth(),
-                                date.getUTCDate());
-    
-
-            if (utc_date == todaysDateUTC) {
-                passengerTodaysTrips.push(tripsAsPassenger[i]);
-            } else if (utc_date > todaysDateUTC) {
-                passengerUpcomingTrips.push(tripsAsPassenger[i]);
-            } else if (utc_date < todaysDateUTC) {
-                passengerPastTrips.push(tripsAsPassenger[i]);
-            }
-        }
-
-        createTripTable(todaysTrips, "Today\'s Trip", 'todayTable');
-        createTripTable(upcomingTrips, 'Upcoming Trips', 'upcomingTable');
-        createTripTable(pastTrips, 'Past trips', 'pastTable');
-
-        createPassengerTripTable(passengerTodaysTrips, "Today\'s' Trips", 'passengerUpcomingTable')
-        createPassengerTripTable(passengerUpcomingTrips, 'Upccoming Trips', 'passengerUpcomingTable')
-        createPassengerTripTable(passengerPastTrips, 'Past Trips', 'passengerPastTable')
-
-        organizeData(trips)
-    }
-
     function getTrips() {
         $.get('/trips.json', sortTripsByDate);
     }
 
     getTrips();
 
-    function createTripTable(trips, title, elementID) {
-
-        if (trips.length === 0) {
-            return null;
-        } else {
-            let table = "<table class='table'>";
-            table += `<h3>${title}</h3>`;
-            table += "<thead>";
-            table += "<tr>";
-            table += "<th scope='col'>Date:</th>";
-            table += "<th scope='col'>From:</th>";
-            table += "<th scope='col'>To:</th>";
-            table += "<th scope='col'>Passengers:</th>";
-            table += "</tr>";
-            table += "</thead>";
-
-            
-            for (let i = trips.length-1; i >= 0; i--) {
-
-                let passengerFirstName;
-                let passengerProfileImg;
-
-                passengerList = trips[i]["passengers"];
-
-                // Map (like list comprehension)
-                for (let j = 0; j < passengerList.length; j++) {
-                    passengerFirstName = passengerList[j]["userFirstName"];
-                    passengerProfileImg = passengerList[j]["userProfileImg"];
-                }
-                
-                table += "<tbody>";
-                table += "<tr>";
-                table += "<td>" + trips[i]["dateOfTrip"]+"</td>";
-                table += "<td>" + trips[i]["origin"]+"</td>";
-                table += "<td>" + trips[i]["destination"]+"</td>";
-                table += "<td>" + (passengerFirstName != undefined ? `<img 
-                                  src=${passengerProfileImg}>`
-                                +  '&nbsp; &nbsp;'
-                                +  passengerFirstName
-                                +  '&nbsp; &nbsp;'
-                                +  '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Message</button>'
-                               : "No passengers yet!");
-                                 + "</td>";
-        
-                table += "</tr>";
-            }  
-            table += "</tbody>"
-            table += "</table>";
-            document.getElementById(elementID).innerHTML = table;
-            }
-
-    }
-
-
-   function createPassengerTripTable(trips, title, elementID) {
-
-        if (trips.length === 0) {
-            return null;
-        } else {
-            let table = "<table class='table table-dark'>";
-            table += `<h3>${title}</h3>`;
-            table += "<th>Date:</th>";
-            table += "<th>From:</th>";
-            table += "<th>To:</th>";
-            table += "<th>Driver:</th>";
-
-            
-            for (let i = trips.length-1; i >= 0; i--) {
-
-                let userProfileImg = trips[i]["userProfileImg"];
-
-                table += "<tr>";
-                table += "<td>" + trips[i]["dateOfTrip"]+"</td>";
-                table += "<td>" + trips[i]["origin"]+"</td>";
-                table += "<td>" + trips[i]["destination"]+"</td>";
-                table += "<td>" + `<img src="${userProfileImg}">`
-                                + '&nbsp; &nbsp;'
-                                + trips[i]["userFirstName"]
-                                + '&nbsp; &nbsp;'
-                                + '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Message</button>';
-                                + "</td>";
-        
-                table += "</tr>";
-            }  
-
-            table += "</table>";
-            document.getElementById(elementID).innerHTML = table;
-            }
-
-    }
 
     function displayUserInfo(results) {
         let img = results["user_info"]["user_profile_img"];
         document.getElementById("profileImg").src = img;
     }
     
-
     function getUserInfo() {
             $.get('/user-info.json', displayUserInfo);
         }
 
     getUserInfo();
-
-    // ChartJS
-    function organizeData(trips) {
-
-        let destinationsObj = {};
-
-        for (let i = 0; i < trips.length; i++) {
-            destination = trips[i]['destination']
-
-            if (!(destination in destinationsObj)) {
-                destinationsObj[destination] = 1;
-            } else {
-                destinationsObj[destination] += 1;
-            } 
-        }
-
-        let cities = [];
-        let counts = [];
-        let colors = [];
-
-        let generateBackgroundColors = function() {
-            let r = Math.floor(Math.random() * 255);
-            let g = Math.floor(Math.random() * 255);
-            let b = Math.floor(Math.random() * 255);
-
-            return `rgb(${r}, ${b}, ${g})`;
-        };
-
-        for (city in destinationsObj) {
-            cities.push(city);
-            counts.push(destinationsObj[city]);
-            colors.push(generateBackgroundColors());
-        }
-
-        let ctx = document.getElementById("myChart").getContext("2d")
-
-        data = {
-            datasets: [{
-                data: counts,
-                backgroundColor: colors
-            }],
-
-            labels: cities
-        };
-
-        let myDoughnutChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: data,
-            options: {}
-        });
-    }
 
 </script>
 

@@ -1,7 +1,7 @@
 """
-I am a docstring.
+This module holds the view functions for Raite.
 
-More details here.
+Some of the functions help the user log in, search for rides, and add a ride.
 """
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
@@ -190,15 +190,20 @@ def search_rides():
             return redirect('/search-rides')
 
         else:
+            drop_offs_nearby = distance_matrix_filter.distance_matrix_filter(destination, trips)
 
-            drop_offs_nearby = distance_matrix_filter(destination, trips)
-            return render_template('nearby_search_results.html',
-                                    origin=origin,
-                                    destination=destination,
-                                    date=date,
-                                    date_desired=date_desired,
-                                    date_obj=date_obj,
-                                    drop_offs_nearby=drop_offs_nearby)
+            if not drop_offs_nearby:
+                flash("Sorry, no rides were found. " +
+                "Would you like to try another search?")
+                return redirect('/search-rides')
+            else:
+                return render_template('nearby_search_results.html',
+                                        origin=origin,
+                                        destination=destination,
+                                        date=date,
+                                        date_desired=date_desired,
+                                        date_obj=date_obj,
+                                        drop_offs_nearby=drop_offs_nearby)
     else:
         return render_template('search_results.html',
                                 trips=trips,
@@ -239,7 +244,6 @@ def create_user_trip():
 def notify_user():
     """Send text message to passenger/driver with Twilio API."""
     client = Client(twilioSID, twilioAuthKey)
-
     msg = request.form.get("message")
 
     client.messages.create(to=myNum, from_=twilioNum, body=msg)
