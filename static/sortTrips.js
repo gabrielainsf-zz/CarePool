@@ -22,7 +22,6 @@ function sortTripsByDate(results) {
                             date.getUTCMonth(),
                             date.getUTCDate());
 
-
         if (utc_date == todaysDateUTC) {
             todaysTrips.push(trips[i]);
         } else if (utc_date > todaysDateUTC) {
@@ -57,5 +56,6 @@ function sortTripsByDate(results) {
     createPassengerTripTable(passengerUpcomingTrips, 'Upcoming Trips', 'passengerUpcomingTable')
     createPassengerTripTable(passengerPastTrips, 'Past Trips', 'passengerPastTable')
 
-    organizeData(trips)
+    createDestinationChart(trips)
+    createCarbonFootprintChart(trips)
 }

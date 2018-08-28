@@ -8,7 +8,7 @@ from flask import Flask, render_template, redirect, request, flash, session
 from flask import jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from model import connect_to_db, db, User, Trip, UserTrip
-from helpers import distance_matrix_filter
+from helpers import distance_matrix_filter, distance_matrix
 from datetime import datetime, date
 from twilio.rest import Client
 import os
@@ -137,6 +137,9 @@ def add_trip_process():
     trip_cost = request.form['cost']
     willing_to_stop = request.form['newleg'] in ('True')
     user_id = session['user_id']
+    distance_meters, display_distance = (distance_matrix.distance_matrix(
+                                         trip_origin,
+                                         trip_destination))
 
     new_trip = Trip(date_of_trip=trip_date,
                     max_passengers=max_passengers,
@@ -144,7 +147,10 @@ def add_trip_process():
                     destination=trip_destination,
                     willing_to_stop=willing_to_stop,
                     trip_cost=trip_cost,
-                    user_id=user_id)
+                    user_id=user_id,
+                    distance_meters=distance_meters,
+                    display_distance=display_distance,
+                    is_active=True)
 
     db.session.add(new_trip)
     db.session.commit()
@@ -181,16 +187,18 @@ def search_rides():
 
     if not trips:
         # Query trips from origin
-        trips = Trip.query.filter(Trip.origin == origin,
+        # Unique var names
+        trips_by_origin = Trip.query.filter(Trip.origin == origin,
                                   Trip.date_of_trip >= today).all()
 
-        if not trips:
+        if not trips_by_origin:
             flash("Sorry, no rides were found. " +
                   "Would you like to try another search?")
             return redirect('/search-rides')
 
         else:
-            drop_offs_nearby = distance_matrix_filter.distance_matrix_filter(destination, trips)
+            possible_destinations = [trip.destination for trip in trips_by_origin]
+            drop_offs_nearby = distance_matrix_filter.distance_matrix_filter(destination, possible_destinations, trips_by_origin)
 
             if not drop_offs_nearby:
                 flash("Sorry, no rides were found. " +

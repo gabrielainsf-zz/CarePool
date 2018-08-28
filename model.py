@@ -52,6 +52,7 @@ class Trip(db.Model):
     __tablename__ = "trips"
 
     trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    is_active = db.Column(db.Boolean)
     date_of_trip = db.Column(db.Date, nullable=False)
     max_passengers = db.Column(db.Integer, nullable=False)
     num_passengers = db.Column(db.Integer, nullable=False, default=0)
@@ -64,6 +65,8 @@ class Trip(db.Model):
     # Places
     origin = db.Column(db.String(64), nullable=False)
     destination = db.Column(db.String(64), nullable=False)
+    distance_meters = db.Column(db.Integer, nullable=False)
+    display_distance = db.Column(db.String(15), nullable=False)
 
     # Back reference to User
     user = db.relationship("User", backref=db.backref("trips", order_by=trip_id))
@@ -80,6 +83,8 @@ class Trip(db.Model):
                 'tripCost': self.trip_cost,
                 'origin': self.origin,
                 'destination': self.destination,
+                'distance_meters': self.distance_meters,
+                'display_distance': self.display_distance,
                 'userAsDriver': self.user_id,
                 'userFirstName': self.user.fname,
                 'userProfileImg': self.user.user_profile_img}

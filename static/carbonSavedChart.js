@@ -1,21 +1,12 @@
 
 function createDestinationChart(trips) {
 
-    let destinationsObj = {};
+    let meters = [];
+    let colors = [];
 
     for (let i = 0; i < trips.length; i++) {
-        destination = trips[i]['destination']
+        meters.push(trips[i]['distance_meters'])
 
-        if (!(destination in destinationsObj)) {
-            destinationsObj[destination] = 1;
-        } else {
-            destinationsObj[destination] += 1;
-        } 
-    }
-
-    let cities = [];
-    let counts = [];
-    let colors = [];
 
     let generateBackgroundColors = function() {
         let r = Math.floor(Math.random() * 255);
@@ -25,13 +16,7 @@ function createDestinationChart(trips) {
         return `rgb(${r}, ${b}, ${g})`;
     };
 
-    for (city in destinationsObj) {
-        cities.push(city);
-        counts.push(destinationsObj[city]);
-        colors.push(generateBackgroundColors());
-    }
-
-    let ctx = document.getElementById("destinationChart").getContext("2d")
+    let ctx = document.getElementById("carbonFootprintChart").getContext("2d")
 
     data = {
         datasets: [{
