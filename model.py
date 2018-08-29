@@ -115,12 +115,13 @@ class UserTrip(db.Model):
                 'tripId': self.trip_id,
                 'userId': self.user_id,
                 'dateOfTrip': datetime_str,
-                'userFirstName': self.user.fname,
-                'userProfileImg': self.user.user_profile_img,
+                'userFirstName': self.trip.user.fname,
+                'userProfileImg': self.trip.user.user_profile_img,
                 'origin': self.trip.origin,
                 'destination': self.trip.destination,
                 'displayDistance': self.trip.display_distance,
-                'distanceMeters': self.trip.distance_meters}
+                'distanceMeters': self.trip.distance_meters,
+                'numPassengers': self.trip.num_passengers}
 
 ##############################################################################
 # Helper functions

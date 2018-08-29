@@ -16,15 +16,25 @@
   {% endblock %}
     
   {% block content %}
+
     <body onload="initialize()">
 
-      <div id="locationField">
-        <form action="/search-rides" method=POST>
-          <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting location" required> 
-          <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination" required>
-          <input id="datepicker" type="text" name="date" placeholder="date" required>
-          <input type="submit">
-        </form>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+
+        <div id="locationField">
+          <form action="/search-rides" method=POST>
+            <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting location" required> 
+            <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination" required>
+            <input id="datepicker" type="text" name="date" placeholder="date" required>
+            <input type="submit">
+          </form>
+        </div>
+
+          </div>
+        </div>
+
       </div>
 
     </body>

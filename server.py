@@ -37,9 +37,6 @@ def index():
     """Display Homepage."""
     user_id = session.get('user_id')
 
-    print('\n\n\n index route')
-    print(user_id)
-
     if user_id:
         return render_template('homepage.html')
     else:
@@ -54,23 +51,35 @@ def trips():
     if user_id:
         trips = Trip.query.filter(Trip.user_id == user_id).all()
 
-        trips_dict = []
+        trips_dict_list = []
+        trips_by_date = {}
 
         for trip in trips:
             trip_json = trip.to_json()
-            trips_dict.append(trip_json)
+            trips_dict_list.append(trip_json)
 
-            results = UserTrip.query.filter(UserTrip.trip_id ==
-                                            trip_json["tripId"]).all()
-
-            trip_json["passengers"] = [result.to_json() for result in results]
+            passengers = (UserTrip.query.filter(UserTrip.trip_id ==
+                                                trip_json["tripId"]).all())
+            trip_json["passengers"] = ([passenger.to_json()
+                                        for passenger in passengers])
 
         trips_as_passenger = UserTrip.query.filter(UserTrip.user_id ==
                                                    user_id).all()
         trips_pass_dict = [trip.to_json() for trip in trips_as_passenger]
 
-        return jsonify({'trips': trips_dict,
-                        'tripsAsPassenger': trips_pass_dict})
+        for trip in trips_pass_dict:
+            trips_by_date[trip['dateOfTrip']] = trip
+
+        for trip in trips_dict_list:
+            trips_by_date[trip['dateOfTrip']] = trip
+
+        # for trip, trip2 in zip(trips_pass_dict, trips_dict_list):
+        #     trips_by_date[trip['dateOfTrip']] = trip
+        #     trips_by_date[trip2['dateOfTrip']] = trip2
+
+        return jsonify({'trips': trips_dict_list,
+                        'tripsAsPassenger': trips_pass_dict,
+                        'tripsByDate': trips_by_date})
     else:
         flash("Oops! You need to log in.")
         return jsonify({'status': 'You"re not logged in'})
@@ -80,9 +89,6 @@ def trips():
 def user_info():
     """Serialized information for front-end."""
     user_id = session.get('user_id')
-
-    print('\n\n user-info')
-    print(user_id)
 
     if user_id:
         user_info = User.query.filter(User.user_id == user_id).first()
@@ -201,8 +207,12 @@ def search_rides():
             return redirect('/search-rides')
 
         else:
-            possible_destinations = [trip.destination for trip in trips_by_origin]
-            drop_offs_nearby = distance_matrix_filter.distance_matrix_filter(destination, possible_destinations, trips_by_origin)
+            possible_destinations = ([trip.destination
+                                      for trip in trips_by_origin])
+            drop_offs_nearby = (distance_matrix_filter.distance_matrix_filter(
+                                destination,
+                                possible_destinations,
+                                trips_by_origin))
 
             if not drop_offs_nearby:
                 flash(('Sorry, no rides were found.'

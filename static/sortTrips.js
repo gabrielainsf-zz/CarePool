@@ -1,6 +1,6 @@
 function sortTripsByDate(results) {
  
-    const { trips, tripsAsPassenger } = results;
+    const { trips, tripsAsPassenger, tripsByDate } = results;
 
     let todaysDate = new Date()
     let todaysDateUTC = Date.UTC(todaysDate.getUTCFullYear(),
@@ -58,5 +58,5 @@ function sortTripsByDate(results) {
 
     createDestinationChart(trips);
     createCarbonFootprintChart(trips);
-    createCarbonFootprintOvertimeChart(trips, tripsAsPassenger);
+    createCarbonFootprintOvertimeChart(tripsByDate);
 }

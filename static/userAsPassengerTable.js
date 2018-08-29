@@ -13,13 +13,13 @@
             
             for (let i = trips.length-1; i >= 0; i--) {
 
-                let userProfileImg = trips[i]["userProfileImg"];
+                let driverProfileImg = trips[i]["userProfileImg"];
 
                 table += "<tr>";
                 table += "<td>" + trips[i]["dateOfTrip"]+"</td>";
                 table += "<td>" + trips[i]["origin"]+"</td>";
                 table += "<td>" + trips[i]["destination"]+"</td>";
-                table += "<td>" + `<img src="${userProfileImg}">`
+                table += "<td>" + `<img src="${driverProfileImg}">`
                                 + '&nbsp; &nbsp;'
                                 + trips[i]["userFirstName"]
                                 + '&nbsp; &nbsp;'

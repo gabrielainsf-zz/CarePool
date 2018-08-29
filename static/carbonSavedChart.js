@@ -13,9 +13,9 @@ function createCarbonFootprintChart(trips) {
         destinationArray = trips[i]['destination'].split(',');
         destination = destinationArray[0]
 
-        meters.push(trips[i]['distance_meters']);
-        carbonDioxideCarpool.push((trips[i]['distance_meters']/1609.34) * 404);
-        carbonDioxideIndividual.push(((trips[i]['distance_meters']/1609.34) * 404)
+        meters.push(trips[i]['distanceMeters']);
+        carbonDioxideCarpool.push((trips[i]['distanceMeters']/1609.34) * 404);
+        carbonDioxideIndividual.push(((trips[i]['distanceMeters']/1609.34) * 404)
                                         * (trips[i]['numPassengers'] + 1));
         trip.push(origin + ' to ' + destination);
     }
