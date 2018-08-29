@@ -56,6 +56,6 @@ function sortTripsByDate(results) {
     createPassengerTripTable(passengerUpcomingTrips, 'Upcoming Trips', 'passengerUpcomingTable')
     createPassengerTripTable(passengerPastTrips, 'Past Trips', 'passengerPastTable')
 
-    createDestinationChart(trips)
-    createCarbonFootprintChart(trips)
+    createDestinationChart(trips);
+    createCarbonFootprintChart(trips);
 }
