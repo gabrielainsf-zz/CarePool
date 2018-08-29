@@ -40,10 +40,10 @@ class User(db.Model):
                 'password': self.password,
                 'fname': self.fname,
                 'lname': self.lname,
-                'user_gender': self.user_gender,
-                'user_bio': self.user_bio,
-                'user_profile_img': self.user_profile_img,
-                'user_social_media': self.user_social_media}
+                'userGender': self.user_gender,
+                'userBio': self.user_bio,
+                'userProfileImg': self.user_profile_img,
+                'userSocialMedia': self.user_social_media}
 
 
 class Trip(db.Model):
@@ -83,8 +83,8 @@ class Trip(db.Model):
                 'tripCost': self.trip_cost,
                 'origin': self.origin,
                 'destination': self.destination,
-                'distance_meters': self.distance_meters,
-                'display_distance': self.display_distance,
+                'distanceMeters': self.distance_meters,
+                'displayDistance': self.display_distance,
                 'userAsDriver': self.user_id,
                 'userFirstName': self.user.fname,
                 'userProfileImg': self.user.user_profile_img}
@@ -118,7 +118,9 @@ class UserTrip(db.Model):
                 'userFirstName': self.user.fname,
                 'userProfileImg': self.user.user_profile_img,
                 'origin': self.trip.origin,
-                'destination': self.trip.destination}
+                'destination': self.trip.destination,
+                'displayDistance': self.trip.display_distance,
+                'distanceMeters': self.trip.distance_meters}
 
 ##############################################################################
 # Helper functions

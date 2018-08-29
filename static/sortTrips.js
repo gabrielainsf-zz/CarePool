@@ -58,5 +58,5 @@ function sortTripsByDate(results) {
 
     createDestinationChart(trips);
     createCarbonFootprintChart(trips);
-    createCarbonFootprintOvertimeChart(trips);
+    createCarbonFootprintOvertimeChart(trips, tripsAsPassenger);
 }

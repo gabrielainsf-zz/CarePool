@@ -37,6 +37,9 @@ def index():
     """Display Homepage."""
     user_id = session.get('user_id')
 
+    print('\n\n\n index route')
+    print(user_id)
+
     if user_id:
         return render_template('homepage.html')
     else:
@@ -78,11 +81,14 @@ def user_info():
     """Serialized information for front-end."""
     user_id = session.get('user_id')
 
-    if user_id:
-        user_info = User.query.filter(Trip.user_id == user_id).first()
-        user_info = user_info.to_json()
+    print('\n\n user-info')
+    print(user_id)
 
-        return jsonify({'user_info': user_info})
+    if user_id:
+        user_info = User.query.filter(User.user_id == user_id).first()
+        user_info_json = user_info.to_json()
+
+        return jsonify({'userInfo': user_info_json})
     else:
         flash("Oops! You need to log in.")
         return jsonify({'status': 'You"re not logged in'})
@@ -136,7 +142,7 @@ def add_trip_process():
     max_passengers = request.form['max_passengers']
     trip_cost = request.form['cost']
     willing_to_stop = request.form['newleg'] in ('True')
-    user_id = session['user_id']
+    user_id = session.get('user_id')
     distance_meters, display_distance = (distance_matrix.distance_matrix(
                                          trip_origin,
                                          trip_destination))
@@ -178,7 +184,6 @@ def search_rides():
     date_desired = request.form['date']
     date_obj = datetime.strptime(date_desired, "%m/%d/%Y").date()
     today = date.today()
-    print(today)
 
     # Query for origin and destination, if none, then nearby trips
     trips = Trip.query.filter(Trip.origin == origin,
@@ -187,13 +192,12 @@ def search_rides():
 
     if not trips:
         # Query trips from origin
-        # Unique var names
         trips_by_origin = Trip.query.filter(Trip.origin == origin,
-                                  Trip.date_of_trip >= today).all()
+                                            Trip.date_of_trip >= today).all()
 
         if not trips_by_origin:
-            flash("Sorry, no rides were found. " +
-                  "Would you like to try another search?")
+            flash(('Sorry, no rides were found.'
+                   'Would you like to try another search?'))
             return redirect('/search-rides')
 
         else:
@@ -201,25 +205,25 @@ def search_rides():
             drop_offs_nearby = distance_matrix_filter.distance_matrix_filter(destination, possible_destinations, trips_by_origin)
 
             if not drop_offs_nearby:
-                flash("Sorry, no rides were found. " +
-                "Would you like to try another search?")
+                flash(('Sorry, no rides were found.'
+                       'Would you like to try another search?'))
                 return redirect('/search-rides')
             else:
                 return render_template('nearby_search_results.html',
-                                        origin=origin,
-                                        destination=destination,
-                                        date=date,
-                                        date_desired=date_desired,
-                                        date_obj=date_obj,
-                                        drop_offs_nearby=drop_offs_nearby)
+                                       origin=origin,
+                                       destination=destination,
+                                       date=date,
+                                       date_desired=date_desired,
+                                       date_obj=date_obj,
+                                       drop_offs_nearby=drop_offs_nearby)
     else:
         return render_template('search_results.html',
-                                trips=trips,
-                                origin=origin,
-                                destination=destination,
-                                date_desired=date_desired,
-                                date=date,
-                                date_obj=date_obj)
+                               trips=trips,
+                               origin=origin,
+                               destination=destination,
+                               date_desired=date_desired,
+                               date=date,
+                               date_obj=date_obj)
 
 
 @app.route('/join-ride', methods=["POST"])

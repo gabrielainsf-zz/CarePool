@@ -21,87 +21,119 @@
 </head>
 <body>
 
-    <div class="container-fluid">
+<div class="container">
 
-        <div>
-            <img id="profileImg" src="">
-        </div><br>
 
-        <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Raite</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <br>
-        {% with messages = get_flashed_messages() %}
-            {% for message in messages %}
-                <div>{{ message }}</div>
-                <br>
-            {% endfor %}
-        {% endwith %}
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/add-ride">Post Ride</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/search-rides">Search Rides</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <img id="profileImg" src="" class="rounded-circle">
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Action</a>
+              <a class="dropdown-item" href="#">Another action</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="/logout">Log Out</a>
+            </div>
+        </li>
+    </ul>
+    </div>
+    </nav>
 
-        <h2>Welcome!</h2>
+    <br>
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div>{{ message }}</div>
+            <br>
+        {% endfor %}
+    {% endwith %}
 
-        <ul class="nav nav-tabs" role="tabpanel">
-            <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#home">Home</a></li>
-            <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsDriver">I'm Driving</a></li>
-            <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsPassenger">I'm Joining</a></li>
-        </ul>
+    <h2>Welcome</h2>
+    <br>
 
-        <div class="tab-content">
-            <div id="home" class="tab-pane fade">
-                <br><br>
-                <p>Hello</p>
+    <ul class="nav nav-tabs" role="tabpanel">
+        <li class="nav-item"><a data-toggle="tab" class="nav-link" aria-selected="true" href="#home" aria-controls="home" role="tab">Home</a></li>
+        <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsDriver">I'm Driving</a></li>
+        <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsPassenger">I'm Joining</a></li>
+    </ul>
 
-                <div class="row">
-                    <div class="col-6">
-                        <canvas id="destinationChart"></canvas>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <canvas id="carbonFootprintChart"></canvas>
-                </div>
-                <br>
-                <div class="row">
-                    <canvas id="carbonFootprintOverTimeChart"></canvas>
+    <div class="tab-content" id="myTab">
+        <div id="home" class="tab-pane fade">
+            <br><br>
+            <p>Hello</p>
+
+            <div class="row">
+                <div class="col-6">
+                    <canvas id="destinationChart"></canvas>
                 </div>
             </div>
-            <div id="ridesAsDriver" class="tab-pane fade">
-                    <div id="todayTable"></div>
-                    <div id="upcomingTable"> </div>
-                    <div id="pastTable"></div>
+            <br>
+            <div class="row">
+                <canvas id="carbonFootprintChart"></canvas>
             </div>
-
-            <div id="ridesAsPassenger" class="tab-pane fade">
-                <div id="passengerTodayTable"></div>
-                <div id="passengerUpcomingTable"></div>
-                <div id="passengerPastTable"></div>
+            <br>
+            <div class="row">
+                <canvas id="carbonFootprintOverTimeChart"></canvas>
             </div>
         </div>
+        <div id="ridesAsDriver" class="tab-pane fade">
+                <div id="todayTable"></div>
+                <div id="upcomingTable"> </div>
+                <div id="pastTable"></div>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Send message</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form action="/notify" method="post" class="form-group">
-                    <input type="text" class="form-control" name="message">
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <input type="submit" class="btn btn-primary" value="Message">
-                </form>
-              </div>
-            </div>
-          </div>
+        <div id="ridesAsPassenger" class="tab-pane fade">
+            <div id="passengerTodayTable"></div>
+            <div id="passengerUpcomingTable"></div>
+            <div id="passengerPastTable"></div>
         </div>
     </div>
-    <script>
+    </div>
+
+        <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Send message</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action="/notify" method="post" class="form-group">
+                <input type="text" class="form-control" name="message">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary" value="Message">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<script>
 
     function getTrips() {
         $.get('/trips.json', sortTripsByDate);
@@ -111,7 +143,7 @@
 
 
     function displayUserInfo(results) {
-        let img = results["user_info"]["user_profile_img"];
+        let img = results["userInfo"]["userProfileImg"];
         document.getElementById("profileImg").src = img;
     }
     
@@ -120,6 +152,11 @@
         }
 
     getUserInfo();
+
+    $('#myTab a[href="#home"]').on('load', function (e) {
+        e.preventDefault()
+        $(this).tab('show')
+})
 
 </script>
 

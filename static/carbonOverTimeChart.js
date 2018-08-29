@@ -1,5 +1,5 @@
 
-function createCarbonFootprintOvertimeChart(trips) {
+function createCarbonFootprintOvertimeChart(trips, tripsAsPass) {
 
 
     let date = [];
@@ -8,16 +8,22 @@ function createCarbonFootprintOvertimeChart(trips) {
     let totalCarbonArray = [];
     let totalCarbonPerPersonArray = [];
 
+    console.log(trips);
+    function populateArrays(listOfTrips) {
+        console.log(listOfTrips);
+       for (let i = 0; i < listOfTrips.length; i++) {
 
-    for (let i = 0; i < trips.length; i++) {
-
-        totalCarbon += ((trips[i]['distance_meters']/1609.34) * 404);
-        totalCarbonArray.push(totalCarbon);
-        totalCarbonPerPerson += (((trips[i]['distance_meters']/1609.34) * 404)
-                                        * (trips[i]['numPassengers'] + 1));
-        totalCarbonPerPersonArray.push(totalCarbonPerPerson);
-        date.push(trips[i]['dateOfTrip']);
+            totalCarbon += ((listOfTrips[i]['distanceMeters']/1609.34) * 404);
+            totalCarbonArray.push(totalCarbon);
+            totalCarbonPerPerson += (((listOfTrips[i]['distanceMeters']/1609.34) * 404)
+                                            * (listOfTrips[i]['numPassengers'] + 1));
+            totalCarbonPerPersonArray.push(totalCarbonPerPerson);
+            date.push(listOfTrips[i]['dateOfTrip']);
+        } 
     }
+
+    populateArrays(trips);
+    populateArrays(tripsAsPass);
 
 
     let ctx = document.getElementById("carbonFootprintOverTimeChart").getContext("2d")
