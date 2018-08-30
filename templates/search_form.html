@@ -9,28 +9,35 @@
       <script src="/static/searchCity.js"></script>
       <script src="/static/datePicker.js"></script>
 
+      <style>
+        .date {
+          -webkit-box-shadow: none;
+          -moz-box-shadow: none;
+          box-shadow: 0px 0px 0px !important;
+          }
+      </style>
+
   {% endblock %}
     
   {% block content %}
 
     <body onload="initialize()">
 
-      <div class="container">
-        <div class="row">
-          <div class="col">
-
-        <div id="locationField">
-          <form action="/search-rides" method=POST>
-            <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting location" required> 
-            <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination" required>
-            <input class="datepicker" type="text" name="date" placeholder="date" required>
-            <input type="submit">
-          </form>
+      <br><br><br>
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">Search rides</h1>
+          <p class="lead">
+            <div id="locationField">
+              <form action="/search-rides" method=POST>
+                <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting city" required> 
+                <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination" required>
+                <input class="datepicker date" id="date" type="text" name="date" placeholder="Date" required>
+                <input type="submit" class="btn btn-primary">
+              </form>
+            </div>
+          </p>
         </div>
-
-          </div>
-        </div>
-
       </div>
 
     </body>

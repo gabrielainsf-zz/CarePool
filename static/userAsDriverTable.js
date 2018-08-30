@@ -11,6 +11,7 @@ function createTripTable(trips, title, elementID) {
         table += "<th scope='col'>From:</th>";
         table += "<th scope='col'>To:</th>";
         table += "<th scope='col'>Passengers:</th>";
+        table += "<th scope='col'>Edit Ride:</th>";
         table += "</tr>";
         table += "</thead>";
 
@@ -26,7 +27,7 @@ function createTripTable(trips, title, elementID) {
             passengerList = trips[i]["passengers"];
 
             if (passengerList.length === 0) {
-                table +=  "<td> No passengers yet! </td>";
+                table +=  "<td> No passengers ~</td>";
             } else {
                 for (let j = 0; j < passengerList.length; j++) {
                     passengerFirstName = passengerList[j]["userFirstName"]
@@ -41,6 +42,7 @@ function createTripTable(trips, title, elementID) {
                 } 
             }
             
+            table += "<td>" + (trips[i]["numPassengers"] < trips[i]["maxPassengers"] ? 'one' : 'two') + "</td>";
             table += "</tr>";
         }  
         table += "</tbody>"

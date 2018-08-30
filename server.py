@@ -37,8 +37,10 @@ def index():
     """Display Homepage."""
     user_id = session.get('user_id')
 
+    user_info = User.query.filter(User.user_id == user_id).one()
+
     if user_id:
-        return render_template('homepage.html')
+        return render_template('homepage.html', user_info=user_info)
     else:
         return render_template('index.html')
 

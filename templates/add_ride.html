@@ -17,25 +17,40 @@
 
 
   {% block content %}
-    <h3>Add a ride</h3>
-    <body onload="initialize()">
-      <form action="/add-ride" class="form-group" method=POST>
-        
-        Date of trip: 
-          <input class="datepicker" type="text" name="date"><br>
-        Where does your trip begin? 
-          <input type="text" name="origin" class="query"><br>
-        What is your destination?
-          <input type="text" name="destination" class="query"><br>
-        How many passengers would you like to take?
-          <input type="text" name="max_passengers"><br>
-        Are you willing to pick up or drop off along the way?
-          <input type="radio" name="newleg" value="True">Yes 
-          <input type="radio" name="newleg" value="False">No<br> 
-        How much should each passenger chip in? 
-          <input type="text" name="cost"><br>
 
-        <input type="submit">
-      </form>
+
+    <body onload="initialize()">
+
+      <br><br><br>
+      <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+          <h1 class="display-4">Add a ride</h1>
+          <p class="lead">
+
+
+          <form action="/add-ride" class="form-group" method=POST>
+            
+            Date of trip: 
+              <input class="datepicker" type="text" name="date" id="inputsm">
+              From 
+              <input type="text" name="origin" class="query">
+            to
+              <input type="text" name="destination" class="query">
+            <hr class="my-4">
+            How many passengers would you like to take?
+              <input type="text" name="max_passengers"><br><br>
+            How much should each passenger chip in? 
+              <input type="text" name="cost"><br><br>
+            Are you willing to pick up or drop off along the way?
+              <input type="radio" name="newleg" value="True">Yes 
+              <input type="radio" name="newleg" value="False">No<br>
+              <br>
+            <input type="submit" class="btn btn-primary">
+          </form>
+
+          </p>
+        </div>
+      </div>
+
     </body>
     {% endblock %}
