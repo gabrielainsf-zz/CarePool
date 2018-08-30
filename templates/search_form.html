@@ -9,10 +9,6 @@
       <script src="/static/searchCity.js"></script>
       <script src="/static/datePicker.js"></script>
 
-      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-
   {% endblock %}
     
   {% block content %}
@@ -27,7 +23,7 @@
           <form action="/search-rides" method=POST>
             <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting location" required> 
             <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination" required>
-            <input id="datepicker" type="text" name="date" placeholder="date" required>
+            <input class="datepicker" type="text" name="date" placeholder="date" required>
             <input type="submit">
           </form>
         </div>
