@@ -11,6 +11,7 @@ from model import connect_to_db, db, User, Trip, UserTrip
 from helpers import distance_matrix_filter, distance_matrix
 from datetime import datetime, date
 from twilio.rest import Client
+import bcrypt
 import os
 
 app = Flask(__name__)
@@ -37,7 +38,7 @@ def index():
     """Display Homepage."""
     user_id = session.get('user_id')
 
-    user_info = User.query.filter(User.user_id == user_id).one()
+    user_info = User.query.filter(User.user_id == user_id).first()
 
     if user_id:
         return render_template('homepage.html', user_info=user_info)
@@ -102,6 +103,27 @@ def user_info():
         return jsonify({'status': 'You"re not logged in'})
 
 
+@app.route('/register', methods=["POST"])
+def register_user():
+    """Register user."""
+    email = request.form['email']
+    password = request.form['password']
+
+    b = password.encode("utf-8")
+
+    # When registering, this hashes password
+    hashed_pw = bcrypt.hashpw(b, bcrypt.gensalt())
+
+    new_user = User(email=email,
+                    password=hashed_pw.decode("utf-8"))
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    flash('Registration completed--log in now')
+    return redirect('/')
+
+
 @app.route('/login', methods=["POST"])
 def log_user_in():
     """Log the user in."""
@@ -118,11 +140,14 @@ def log_user_in():
         user_id = user_by_email.user_id
         user_password = user_by_email.password
 
+        is_password_match = (bcrypt.checkpw(password.encode("utf-8"),
+                                            user_password.encode("utf-8")))
+
         # Verify password is correct
-        if password != user_password:
+        if is_password_match is False:
             flash("Incorrect password.")
 
-        elif email == user_by_email.email and password == user_password:
+        elif email == user_by_email.email and is_password_match:
             session['user_id'] = user_id
             flash('Logged in successfully')
 
@@ -268,11 +293,34 @@ def create_user_trip():
 def notify_user():
     """Send text message to passenger/driver with Twilio API."""
     client = Client(twilioSID, twilioAuthKey)
-    msg = request.form.get("message")
+    msg = request.form.get('message')
 
     client.messages.create(to=myNum, from_=twilioNum, body=msg)
 
     flash('Message sent!')
+    return redirect('/')
+
+
+@app.route('/edit-profile', methods=["GET"])
+def display_profile_edit_form():
+    """Display profile edit form."""
+    return render_template("edit_profile.html")
+
+
+@app.route('/edit-profile', methods=["POST"])
+def update_profile():
+    """Update user's profile."""
+    user_id = session.get('user_id')
+    user = User.query.filter(User.user_id == user_id).one()
+    user.fname = request.form['fname']
+    user.lname = request.form['lname']
+    user.user_gender = request.form['gender']
+    user.user_bio = request.form['bio']
+    user.user_profile_img = request.form['profile_picture']
+    user.user_social_media = request.form['social_media']
+
+    db.session.commit()
+    flash('Profile information updated')
     return redirect('/')
 
 

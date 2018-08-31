@@ -22,15 +22,15 @@ class User(db.Model):
     # Log-in information
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(64), nullable=True)
-    password = db.Column(db.String(64), nullable=True)
+    password = db.Column(db.String(649), nullable=True)
 
     # Profile information
-    fname = db.Column(db.String(20), nullable=False)
-    lname = db.Column(db.String(20), nullable=False)
-    user_gender = db.Column(db.String(20), nullable=False)
-    user_bio = db.Column(db.String(160), nullable=False)
-    user_profile_img = db.Column(db.String(250), nullable=False)
-    user_social_media = db.Column(db.String(3000), nullable=False)
+    fname = db.Column(db.String(20), nullable=True)
+    lname = db.Column(db.String(20), nullable=True)
+    user_gender = db.Column(db.String(20), nullable=True)
+    user_bio = db.Column(db.String(160), nullable=True)
+    user_profile_img = db.Column(db.String(250), nullable=True)
+    user_social_media = db.Column(db.String(3000), nullable=True)
     # phone_number = db.Column(db.Numeric(12), nullable=True)
 
     def to_json(self):

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<br><br>
+<h2>Update personal information</h2>
+<div>
+    <form action="/edit-profile" method="post">
+        <div class="form-row">
+        <div class="col">
+          <input type="text" class="form-control" placeholder="First name" name="fname" required>
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="Last name" name="lname" required>
+        </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <div class="col">
+            <select class="custom-select mr-sm-2" id="inlineFormCustomSelect" name="gender">
+                <option selected>Gender</option>
+                <option value="Female">Female</option>
+                <option value="Non-Binary">Non-binary</option>
+                <option value="Male">Male</option>
+            </select>
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <div class="col">
+            <textarea class="form-control" name="bio" placeholder="Bio"></textarea>
+            </div>
+        </div>
+        <br>
+        <div class="form-row">
+            <div class="col-7">
+              <input type="text" class="form-control" placeholder="Profile Img URL" name="profile_picture">
+            </div>
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Social Media URL" name="social_media">
+            </div>
+        </div><br>
+        <input type="submit" class="btn btn-primary" value="Update">
+
+    </form>
+</div>
+
+
+{% endblock %}
