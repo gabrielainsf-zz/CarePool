@@ -3,18 +3,18 @@ This module holds the view functions for Raite.
 
 Some of the functions help the user log in, search for rides, and add a ride.
 """
+import bcrypt
+import os
+from datetime import datetime, date
 
-# Order imports by first party, second party etc
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 from flask import jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from model import connect_to_db, db, User, Trip, UserTrip
-from helpers import distance_matrix_filter, distance_matrix
-from datetime import datetime, date
 from twilio.rest import Client
-import bcrypt
-import os
+
+from helpers import distance_matrix_filter, distance_matrix
+from model import User, Trip, UserTrip, connect_to_db, db
 
 app = Flask(__name__)
 
