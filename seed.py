@@ -126,8 +126,8 @@ if __name__ == "__main__":
     # In case tables haven't been created, create them
     db.create_all()
 
-    load_users()
+    # load_users()
     # load_trips()
     # load_usertrips()
-    # set_val_trip_id()
+    set_val_trip_id()
     set_val_user_id()

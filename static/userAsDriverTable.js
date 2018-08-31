@@ -11,7 +11,6 @@ function createTripTable(trips, title, elementID) {
         table += "<th scope='col'>From:</th>";
         table += "<th scope='col'>To:</th>";
         table += "<th scope='col'>Passengers:</th>";
-        table += "<th scope='col'>Edit Ride:</th>";
         table += "</tr>";
         table += "</thead>";
 
@@ -34,22 +33,21 @@ function createTripTable(trips, title, elementID) {
                     passengerProfileImg = passengerList[j]["userProfileImg"]
 
                     table += "<td>" + `<img src=${passengerProfileImg}>`
-                                    +  '&nbsp; &nbsp;'
-                                    +  passengerFirstName
-                                    +  '&nbsp; &nbsp;'
-                                    +  '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Message</button>'
+                                    + '&nbsp; &nbsp;'
+                                    + passengerFirstName
+                                    + '&nbsp; &nbsp;'
+                                    + '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Message</button>'
                                     + "</td>"
                 } 
             }
             
-            table += "<td>" + (trips[i]["numPassengers"] < trips[i]["maxPassengers"] ? 'one' : 'two') + "</td>";
             table += "</tr>";
         }  
         table += "</tbody>"
         table += "</table>";
         document.getElementById(elementID).innerHTML = table;
         
-        }
+    }
 
 }
 

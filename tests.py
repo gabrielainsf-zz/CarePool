@@ -68,6 +68,7 @@ class FlaskTestsLoggedIn(unittest.TestCase):
         # Create tables and add sample data
         db.create_all()
         example_data()
+        
 
     def test_login(self):
         """Test login page in homepage"""

@@ -1,8 +1,7 @@
 """Models and database functions for Rideshare project."""
 
+import bcrypt
 from flask_sqlalchemy import SQLAlchemy
-from datetime import date
-# from server import login
 
 # This is the connection to the PostgreSQL database; we're getting this through
 # the Flask-SQLAlchemy helper library. On this, we can find the `session`
@@ -60,8 +59,9 @@ class Trip(db.Model):
     trip_cost = db.Column(db.Integer, nullable=False)
 
     # User as Driver
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-
+    user_id = (db.Column(db.Integer,
+                         db.ForeignKey('users.user_id'),
+                         nullable=False))
     # Places
     origin = db.Column(db.String(64), nullable=False)
     destination = db.Column(db.String(64), nullable=False)
@@ -69,7 +69,9 @@ class Trip(db.Model):
     display_distance = db.Column(db.String(15), nullable=False)
 
     # Back reference to User
-    user = db.relationship("User", backref=db.backref("trips", order_by=trip_id))
+    user = (db.relationship("User",
+                            backref=db.backref("trips",
+                                               order_by=trip_id)))
 
     def to_json(self):
         """Serialize data."""
@@ -98,14 +100,20 @@ class UserTrip(db.Model):
     user_trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
 
     # Back reference to Trip
-    trip_id = db.Column(db.Integer, db.ForeignKey('trips.trip_id'), nullable=False)
-    trip = db.relationship("Trip", backref=db.backref("user_trips", order_by=user_trip_id))
-
+    trip_id = (db.Column(db.Integer,
+                         db.ForeignKey('trips.trip_id'),
+                         nullable=False))
+    trip = (db.relationship("Trip",
+                            backref=db.backref("user_trips",
+                                               order_by=user_trip_id)))
     # User as Passenger
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-
+    user_id = (db.Column(db.Integer,
+                         db.ForeignKey('users.user_id'),
+                         nullable=False))
     # Back reference to User
-    user = db.relationship("User", backref=db.backref("user_trips", order_by=user_trip_id))
+    user = (db.relationship("User",
+                            backref=db.backref("user_trips",
+                                               order_by=user_trip_id)))
 
     def to_json(self):
         """Serialize data."""
@@ -140,13 +148,17 @@ def connect_to_db(app, db_uri="postgresql:///rideshares"):
 
 def example_data():
     """Provide example data for tests.py."""
+    b = "fakepw"
+    hashed_pw = bcrypt.hashpw(b.encode("utf-8"), bcrypt.gensalt())
+
     user = User(fname="Jo",
                 lname="Bama",
                 email="jo@bama.com",
                 user_bio="Friendly person",
                 user_gender="Female",
-                password="jo@bama.com",
-                user_profile_img="https://robohash.org/enimsolutaqui.png?size=50x50&set=set1",
+                password=hashed_pw.decode("utf-8"),
+                user_profile_img=("https://robohash.org/enimsolutaqui.png?size"
+                                  "=50x50&set=set1"),
                 user_social_media="twitter.com")
 
     db.session.add(user)
