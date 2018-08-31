@@ -121,7 +121,9 @@ class UserTrip(db.Model):
                 'destination': self.trip.destination,
                 'displayDistance': self.trip.display_distance,
                 'distanceMeters': self.trip.distance_meters,
-                'numPassengers': self.trip.num_passengers}
+                'numPassengers': self.trip.num_passengers,
+                'driverFirstName': self.trip.user.fname,
+                'driverProfileImg': self.trip.user.user_profile_img}
 
 ##############################################################################
 # Helper functions

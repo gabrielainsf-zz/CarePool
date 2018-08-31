@@ -13,7 +13,7 @@
             
             for (let i = trips.length-1; i >= 0; i--) {
 
-                let driverProfileImg = trips[i]["userProfileImg"];
+                let driverProfileImg = trips[i]["driverProfileImg"];
 
                 table += "<tr>";
                 table += "<td>" + trips[i]["dateOfTrip"]+"</td>";
@@ -21,7 +21,7 @@
                 table += "<td>" + trips[i]["destination"]+"</td>";
                 table += "<td>" + `<img src="${driverProfileImg}">`
                                 + '&nbsp; &nbsp;'
-                                + trips[i]["userFirstName"]
+                                + trips[i]["driverFirstName"]
                                 + '&nbsp; &nbsp;'
                                 + '<button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModalCenter">Message</button>';
                                 + "</td>";
