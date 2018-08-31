@@ -31,7 +31,7 @@ class User(db.Model):
     user_bio = db.Column(db.String(160), nullable=True)
     user_profile_img = db.Column(db.String(250), nullable=True)
     user_social_media = db.Column(db.String(3000), nullable=True)
-    # phone_number = db.Column(db.Numeric(12), nullable=True)
+    phone_number = db.Column(db.Numeric(12), nullable=True)
 
     def to_json(self):
         """Serialize data."""
@@ -115,8 +115,8 @@ class UserTrip(db.Model):
                 'tripId': self.trip_id,
                 'userId': self.user_id,
                 'dateOfTrip': datetime_str,
-                'userFirstName': self.trip.user.fname,
-                'userProfileImg': self.trip.user.user_profile_img,
+                'userFirstName': self.user.fname,
+                'userProfileImg': self.user.user_profile_img,
                 'origin': self.trip.origin,
                 'destination': self.trip.destination,
                 'displayDistance': self.trip.display_distance,

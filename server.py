@@ -68,6 +68,7 @@ def trips():
     user_id = session.get('user_id')
 
     if user_id:
+        # Query all of the trips where the user is the driver
         trips = Trip.query.filter(Trip.user_id == user_id).all()
 
         trips_dict_list = []
@@ -328,12 +329,27 @@ def update_profile():
     """Update user's profile."""
     user_id = session.get('user_id')
     user = User.query.filter(User.user_id == user_id).one()
-    user.fname = request.form['fname']
-    user.lname = request.form['lname']
-    user.user_gender = request.form['gender']
-    user.user_bio = request.form['bio']
-    user.user_profile_img = request.form['profile_picture']
-    user.user_social_media = request.form['social_media']
+
+    if len(request.form['fname']) > 0:
+        user.fname = request.form['fname']
+
+    if len(request.form['lname']) > 0:
+        user.lname = request.form['lname']
+
+    if len(request.form['phone_number']) > 0:
+        user.phone_number = request.form['phone_number']
+
+    if len(request.form['gender']) > 0:
+        user.user_gender = request.form['gender']
+
+    if len(request.form['bio']) > 0:
+        user.user_bio = request.form['bio']
+
+    if len(request.form['profile_picture']) > 0:
+        user.user_profile_img = request.form['profile_picture']
+
+    if len(request.form['social_media']) > 0:
+        user.user_social_media = request.form['social_media']
 
     db.session.commit()
     flash('Profile information updated')
