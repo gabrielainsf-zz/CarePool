@@ -3,6 +3,8 @@ This module holds the view functions for Raite.
 
 Some of the functions help the user log in, search for rides, and add a ride.
 """
+
+# Order imports by first party, second party etc
 from jinja2 import StrictUndefined
 from flask import Flask, render_template, redirect, request, flash, session
 from flask import jsonify
