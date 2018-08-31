@@ -32,6 +32,20 @@ myNum = os.environ['MY_NUM']
 # error.
 app.jinja_env.undefined = StrictUndefined
 
+# Flask Upload
+UPLOAD_FOLDER = '/static/img'
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+@app.context_processor
+def inject_user():
+    """Pass in user information."""
+    user_id = session.get('user_id')
+
+    user_info = User.query.filter(User.user_id == user_id).first()
+    return dict(user_info=user_info)
+
 
 @app.route('/')
 def index():

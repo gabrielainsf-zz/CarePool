@@ -1,63 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-
-    <script
-    src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-
-    <script src="/static/sortTrips.js"></script>
-    <script src="/static/userAsPassengerTable.js"></script>
-    <script src="/static/userAsDriverTable.js"></script>
-    <script src="/static/carbonSavedChart.js"></script>
-    <script src="/static/carbonOverTimeChart.js"></script>
-
-</head>
-<body>
-
-<div class="container">
-
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Raite</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/add-ride">Post Ride</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/search-rides">Search Rides</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-            <img id="profileImg" src="" class="rounded-circle">
-        </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="/edit-profile">Edit profile</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="/logout">Log Out</a>
-            </div>
-        </li>
-    </ul>
-    </div>
-    </nav>
+{% extends 'base.html' %}
 
     <br>
     {% with messages = get_flashed_messages() %}
@@ -70,6 +11,7 @@
     <h2>Welcome, {{ user_info.fname }} ~ </h2>
     <br>
 
+    {% block content %}
     <ul class="nav nav-tabs" role="tabpanel">
         <li class="nav-item"><a data-toggle="tab" class="nav-link" aria-selected="true" href="#home" aria-controls="home" role="tab">Home</a></li>
         <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsDriver">I'm Driving</a></li>
@@ -160,5 +102,4 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
-</body>
-</html>
+{% endblock %}
