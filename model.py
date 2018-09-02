@@ -13,7 +13,7 @@ db = SQLAlchemy()
 # Model definitions
 
 
-class User(db.Model):
+class User(db.Model):  # pragma: no cover
     """User information."""
 
     __tablename__ = "users"
@@ -32,7 +32,7 @@ class User(db.Model):
     user_social_media = db.Column(db.String(3000), nullable=True)
     phone_number = db.Column(db.Numeric(12), nullable=True)
 
-    def to_json(self):
+    def to_json(self):  # pragma: no cover
         """Serialize data."""
         return {'user_id': self.user_id,
                 'email': self.email,
@@ -45,7 +45,7 @@ class User(db.Model):
                 'userSocialMedia': self.user_social_media}
 
 
-class Trip(db.Model):
+class Trip(db.Model):  # pragma: no cover
     """Trip information."""
 
     __tablename__ = "trips"
@@ -73,7 +73,7 @@ class Trip(db.Model):
                             backref=db.backref("trips",
                                                order_by=trip_id)))
 
-    def to_json(self):
+    def to_json(self):  # pragma: no cover
         """Serialize data."""
         datetime_str = self.date_of_trip.strftime('%Y-%m-%d')
 
@@ -92,7 +92,7 @@ class Trip(db.Model):
                 'userProfileImg': self.user.user_profile_img}
 
 
-class UserTrip(db.Model):
+class UserTrip(db.Model):  # pragma: no cover
     """User (passenger) has joined a trip."""
 
     __tablename__ = "user_trips"
@@ -115,7 +115,7 @@ class UserTrip(db.Model):
                             backref=db.backref("user_trips",
                                                order_by=user_trip_id)))
 
-    def to_json(self):
+    def to_json(self):  # pragma: no cover
         """Serialize data."""
         datetime_str = self.trip.date_of_trip.strftime('%Y-%m-%d')
 
@@ -137,7 +137,7 @@ class UserTrip(db.Model):
 # Helper functions
 
 
-def connect_to_db(app, db_uri="postgresql:///rideshares"):
+def connect_to_db(app, db_uri="postgresql:///rideshares"):  # pragma: no cover
     """Connect the database to our Flask app."""
     # Configure to use our PstgreSQL database
     app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
@@ -146,7 +146,7 @@ def connect_to_db(app, db_uri="postgresql:///rideshares"):
     db.init_app(app)
 
 
-def example_data():
+def example_data():  # pragma: no cover
     """Provide example data for tests.py."""
     b = "fakepw"
     hashed_pw = bcrypt.hashpw(b.encode("utf-8"), bcrypt.gensalt())
@@ -162,9 +162,22 @@ def example_data():
                 user_social_media="twitter.com")
 
     db.session.add(user)
+
+    trip = Trip(date_of_trip="11-13-2018",
+                max_passengers="3",
+                num_passengers="1",
+                willing_to_stop=False,
+                trip_cost="10",
+                user_id="1",
+                origin="San Francisco",
+                destination="Los Angeles",
+                distance_meters="15422",
+                display_distance="13 mi")
+
+    db.session.add(trip)
     db.session.commit()
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     # As a convenience, if we run this module interactively, it will leave
     # you in a state of being able to work with the database directly.
 

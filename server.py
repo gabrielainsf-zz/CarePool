@@ -105,21 +105,6 @@ def trips():
         return jsonify({'status': 'You"re not logged in'})
 
 
-@app.route('/user-info.json')
-def user_info():
-    """Serialized information for front-end."""
-    user_id = session.get('user_id')
-
-    if user_id:
-        user_info = User.query.filter(User.user_id == user_id).first()
-        user_info_json = user_info.to_json()
-
-        return jsonify({'userInfo': user_info_json})
-    else:
-        flash("Oops! You need to log in.")
-        return jsonify({'status': 'You"re not logged in'})
-
-
 @app.route('/register', methods=["POST"])
 def register_user():
     """Register user."""
