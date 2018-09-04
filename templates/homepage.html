@@ -29,18 +29,30 @@
     </ul>
 
     <div class="tab-content" id="myTab">
-        <div id="home" class="tab-pane fade">
+        <div id="home" class="tab-pane active">
             <br><br>
             <p>Hello</p>
 
             <br>
             <div class="row">
-                <canvas id="carbonFootprintChart"></canvas>
+                <div class="col">
+                    <canvas id="carbonFootprintOverTimeChart"></canvas>
+                </div>
+                <div class="col">
+                    <canvas id="carbonFootprintChart"></canvas> 
+                </div>
             </div>
             <br>
             <div class="row">
-                <canvas id="carbonFootprintOverTimeChart"></canvas>
+                <div class="col">
+                  <div class="card">
+                      <div class="card-body">
+                        So far you have saved <div id="carbonReduced">number</div> liters of CO2.
+                      </div>
+                    </div>
+                </div>
             </div>
+            <br>
         </div>
     
         <div id="ridesAsDriver" class="tab-pane fade">
@@ -87,14 +99,9 @@
     function getTrips() {
         $.get('/trips.json', sortTripsByDate);
     }
-    // add event listener
+
     window.addEventListener("load", getTrips());
 
-
-    $('#myTab a[href="#home"]').on('load', function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-})
 
 </script>
 

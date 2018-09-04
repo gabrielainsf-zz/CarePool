@@ -1,6 +1,7 @@
 
 function createCarbonFootprintChart(trips) {
 
+    // Carbon saved bar chart w/ steps by month
     let meters = [];
     let trip = [];
     let carbonDioxideCarpool = [];
@@ -14,8 +15,8 @@ function createCarbonFootprintChart(trips) {
         destination = destinationArray[0]
 
         meters.push(trips[i]['distanceMeters']);
-        carbonDioxideCarpool.push((trips[i]['distanceMeters']/1609.34) * 404);
-        carbonDioxideIndividual.push(((trips[i]['distanceMeters']/1609.34) * 404)
+        carbonDioxideCarpool.push(((trips[i]['distanceMeters']/1609.34) * 404)/1000);
+        carbonDioxideIndividual.push((((trips[i]['distanceMeters']/1609.34) * 404)/1000)
                                         * (trips[i]['numPassengers'] + 1));
         trip.push(origin + ' to ' + destination);
     }
@@ -26,11 +27,11 @@ function createCarbonFootprintChart(trips) {
         datasets: [{
             label: "Carbon Dioxide per Rideshare",
             data: carbonDioxideCarpool,
-            backgroundColor: "#8e5ea2"
+            backgroundColor: "#808000"
         },{
             label: "Carbon Dioxide if Each Individual Drove",
             data: carbonDioxideIndividual,
-            backgroundColor: "#3e95cd"
+            backgroundColor: "#7A1607"
         }],
 
         labels: trip
@@ -43,7 +44,16 @@ function createCarbonFootprintChart(trips) {
             legend: { display: true },
             title: {
                 display: true,
-                text: 'Carbon Dioxide Emitted Comparison'
+                text: 'Liters of Carbon Dioxide Emitted Comparison'
+            },
+            scales: {
+              xAxes: [{
+                ticks: {
+                  autoSkip: true,
+                  maxRotation: 0,
+                  minRotation: 0
+                }
+              }]
             }
         }
     });

@@ -1,5 +1,5 @@
 
-function createCarbonFootprintOvertimeChart(trips) {
+function createChartByMonth(trips) {
 
     let date = [];
     let totalCarbon = 0;
@@ -8,6 +8,7 @@ function createCarbonFootprintOvertimeChart(trips) {
     let totalCarbonPerPersonArray = [];
     let totalCarbonSaved = 0;
     let totalCarbonSavedArray = [];
+
 
    for (let trip in trips) {
         totalCarbon += (((trips[trip]['distanceMeters']/1609.34) * 404)/1000);
@@ -25,9 +26,9 @@ function createCarbonFootprintOvertimeChart(trips) {
         datasets: [{
             label: "Total Carbon Saved",
             data: totalCarbonSavedArray,
-            borderColor: "#FAB000",
+            borderColor: "#8e5ea2",
             fill: false,
-            steppedLine: true
+            steppedLine: true,
         }],
 
         labels: date

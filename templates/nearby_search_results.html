@@ -1,25 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
+  <br>
+  <h2>Sorry! There aren't rides to {{ destination }} on {{ date_desired }}, but here are some rides nearby: </h2><br>
 
-  <h2>Sorry! There aren't rides to {{ destination }} on {{ date_desired }}, but here are some rides nearby: </h2>
+    {% for trip_id, trip in drop_offs_nearby.items() %}
 
-  <div>
-      {% for trip_id, trip in drop_offs_nearby.items() %}
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="card-title">
+            <img src={{ trip.user.user_profile_img }} class="rounded-circle"> 
+            {{ trip.user.fname }}
+          </h5>
+          <h6 class="card-subtitle mb-2 text-muted">
+          
+          </h6>
+          <p class="card-text">
+          
 
-        City: {{ trip.destination }} <br>
-        Date: {{ trip.date_of_trip }} <br>
-        Driver: {{ trip.user.fname }} <br>
-
-        <img src={{ trip.user.user_profile_img }}>
-
-        <form action="/join-ride" method="POST">
-          <input type="submit" value="Join ride!">
-          <input type="hidden" value={{ trip.trip_id }} name="trip">
+          </p>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Date: {{ trip.date_of_trip }}</li>
+            <li class="list-group-item">Cost: ${{ trip.trip_cost }} </li>
+            <li class="list-group-item">Willing to Stop Along the Way: {{ trip.willing_to_stop }} </li>
+            <li class="list-group-item">{{ trip.max_passengers - trip.num_passengers }} seats left  </li>
+          </ul>
+          <br>
+          <form action="/join-ride" method="POST">
+            <input type="submit" class="btn btn-primary" value="Join ride">
+            <input type="hidden" value={{ trip.trip_id }} name="trip">
         </form>
-        <br>
+        </div>
+      </div>
+      <br>
 
-      {% endfor %}
-  </div>
+    {% endfor %}
+
 
 {% endblock %}
