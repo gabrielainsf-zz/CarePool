@@ -9,18 +9,19 @@ function createTripTable(trips, title, elementID) {
         table += "<thead>";
         table += "<tr>";
         table += "<th><i class='far fa-calendar fa-2x'></i></th>";
+        table += "<th><i class='far fa-clock fa-2x'></i></th>";
         table += "<th><i class='fas fa-map-marker-alt fa-2x'></i></th>";
         table += "<th><i class='fas fa-map-marked-alt fa-2x'></i></th>";
         table += "<th><i class='fas fa-car fa-2x'></i></th>";
         table += "</tr>";
         table += "</thead>";
-
         
         for (let i = trips.length-1; i >= 0; i--) {
 
             table += "<tbody>";
             table += "<tr>";
             table += "<td>" + trips[i]["dateOfTrip"]+"</td>";
+            table += "<td>" + trips[i]["time"]+"</td>";
             table += "<td>" + trips[i]["origin"]+"</td>";
             table += "<td>" + trips[i]["destination"]+"</td>";
 

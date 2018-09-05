@@ -7,11 +7,11 @@
             table += '<br>';
             table += `<h3>${title}</h3>`;
             table += "<th><i class='far fa-calendar fa-2x'></i></th>";
+            table += "<th><i class='far fa-clock fa-2x'></i></th>";
             table += "<th><i class='fas fa-map-marker-alt fa-2x'></i></th>";
             table += "<th><i class='fas fa-map-marked-alt fa-2x'></i></th>";
             table += "<th><i class='fas fa-car fa-2x'></i></th>";
 
-            
             for (let i = trips.length-1; i >= 0; i--) {
 
                 let driverProfileImg = trips[i]["driverProfileImg"];
@@ -20,6 +20,7 @@
 
                 table += "<tr>";
                 table += "<td>" + trips[i]["dateOfTrip"]+"</td>";
+                table += "<td>" + trips[i]["time"]+"</td>";
                 table += "<td>" + trips[i]["origin"]+"</td>";
                 table += "<td>" + trips[i]["destination"]+"</td>";
                 table += "<td>" + `<img src="${driverProfileImg}" class="rounded-circle passenger-img" id="popover" data-toggle="popover" data-placement="right" tabindex="0" data-trigger="hover" data-content="<strong>${driverName}</strong>  ${driverBio}">`

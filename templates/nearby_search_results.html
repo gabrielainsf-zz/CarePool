@@ -20,9 +20,17 @@
 
           </p>
           <ul class="list-group list-group-flush">
+            <li class="list-group-item">To: {{ trip.destination }}</li>
             <li class="list-group-item">Date: {{ trip.date_of_trip }}</li>
+            <li class="list-group-item">Time: {{ trip.time }}</li>
             <li class="list-group-item">Cost: ${{ trip.trip_cost }} </li>
-            <li class="list-group-item">Willing to Stop Along the Way: {{ trip.willing_to_stop }} </li>
+            <li class="list-group-item">Willing to Stop Along the Way: 
+              {% if trip.willing_to_stop == True %}
+                Yes
+              {% else %}
+                Nope, sorry!
+              {% endif %}
+            </li>
             <li class="list-group-item">{{ trip.max_passengers - trip.num_passengers }} seats left  </li>
           </ul>
           <br>

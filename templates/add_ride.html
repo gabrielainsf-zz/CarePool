@@ -10,6 +10,7 @@
 
       <script src="/static/searchCity.js"></script>
       <script src="/static/datePicker.js"></script>
+    
 
   {% endblock %}
 
@@ -30,12 +31,18 @@
 
           <form action="/add-ride" class="form-group" method=POST>
             
+          
             Date of trip: 
-              <input class="datepicker" type="text" name="date" id="inputsm">
+              <input class="datepicker" type="text" name="date" id="inputsm" required>
+            Time:
+              <input class="timepicker" type="text" name="time" required>
+       
               From 
               <input type="text" name="origin" class="query">
             to
               <input type="text" name="destination" class="query">
+           
+
             <hr class="my-4">
             How many passengers would you like to take?
               <input type="text" name="max_passengers"><br><br>
@@ -53,4 +60,5 @@
       </div>
 
     </body>
+
     {% endblock %}

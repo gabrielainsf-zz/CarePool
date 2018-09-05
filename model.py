@@ -53,6 +53,7 @@ class Trip(db.Model):  # pragma: no cover
     trip_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     is_active = db.Column(db.Boolean)
     date_of_trip = db.Column(db.Date, nullable=False)
+    time = db.Column(db.String, nullable=False)
     max_passengers = db.Column(db.Integer, nullable=False)
     num_passengers = db.Column(db.Integer, nullable=False, default=0)
     willing_to_stop = db.Column(db.Boolean, nullable=False)
@@ -84,6 +85,7 @@ class Trip(db.Model):  # pragma: no cover
                 'willingToStop': self.willing_to_stop,
                 'tripCost': self.trip_cost,
                 'origin': self.origin,
+                'time': self.time,
                 'destination': self.destination,
                 'distanceMeters': self.distance_meters,
                 'displayDistance': self.display_distance,
@@ -127,6 +129,7 @@ class UserTrip(db.Model):  # pragma: no cover
                 'userProfileImg': self.user.user_profile_img,
                 'userBio': self.user.user_bio,
                 'origin': self.trip.origin,
+                'time': self.trip.time,
                 'destination': self.trip.destination,
                 'displayDistance': self.trip.display_distance,
                 'distanceMeters': self.trip.distance_meters,

@@ -172,6 +172,7 @@ def add_trip():
 def add_trip_process():
     """Add a trip to the database."""
     trip_date = request.form['date']
+    trip_time = request.form['time']
     trip_origin = request.form['origin']
     trip_destination = request.form['destination']
     max_passengers = request.form['max_passengers']
@@ -183,6 +184,7 @@ def add_trip_process():
                                          trip_destination))
 
     new_trip = Trip(date_of_trip=trip_date,
+                    time=trip_time,
                     max_passengers=max_passengers,
                     origin=trip_origin,
                     destination=trip_destination,

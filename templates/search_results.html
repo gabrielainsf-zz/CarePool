@@ -4,9 +4,9 @@
   <br>
   <h3>Available rides from {{ origin }} to {{ destination }} on {{ date_desired }} :</h3><br>
 
-  
+    <div class="row">
     {% for trip in trips %}
-
+      <div class="col">
       <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h3 class="card-title" align="center">
@@ -22,6 +22,7 @@
           </p>
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Date: {{ trip.date_of_trip }}</li>
+            <li class="list-group-item">Time: {{ trip.time }}</li>
             <li class="list-group-item">Cost: ${{ trip.trip_cost }} </li>
             <li class="list-group-item">Willing to Stop Along the Way: 
               {% if trip.willing_to_stop == True %}
@@ -29,6 +30,7 @@
               {% else %}
                 Nope, sorry!
               {% endif %}
+            </li>
             <li class="list-group-item">{{ trip.max_passengers - trip.num_passengers }} seat(s) left  </li>
           </ul>
           <br>
@@ -38,8 +40,9 @@
         </form>
         </div>
       </div>
-      <br>
+    </div>
 
     {% endfor %}
+  </div>
 
 {% endblock %}
