@@ -1,9 +1,9 @@
 """Utility file to seed user and trip information."""
 
-# from sqlalchemy import func
-# from model import connect_to_db, db
-# from server import app
-# from random import choice
+from sqlalchemy import func
+from model import connect_to_db, db
+from server import app
+from random import choice
 
 
 # def set_val_user_id(): # pragma: no cover
@@ -31,14 +31,14 @@
 #     db.session.commit()
 
 
-# if __name__ == "__main__":
-#     connect_to_db(app)
+if __name__ == "__main__":
+    connect_to_db(app)
 
-#     # In case tables haven't been created, create them
-#     db.create_all()
+    # In case tables haven't been created, create them
+    db.create_all()
 
-#     # load_users()
-#     # load_trips()
-#     # load_usertrips()
-#     set_val_trip_id()
-#     set_val_user_id()
+    # load_users()
+    # load_trips()
+    # load_usertrips()
+    # set_val_trip_id()
+    # set_val_user_id()

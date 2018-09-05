@@ -9,12 +9,12 @@
 
       <div class="card" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="card-title">
-            <img src={{ trip.user.user_profile_img }} class="rounded-circle"> 
+          <h3 class="card-title" align="center">
+            <img src={{ trip.user.user_profile_img }} class="rounded-circle"><br><br> 
             {{ trip.user.fname }}
-          </h5>
-          <h6 class="card-subtitle mb-2 text-muted">
-          
+          </h3>
+          <h6 class="card-subtitle mb-2 text-muted" align="center">
+            {{ trip.user.user_bio }}
           </h6>
           <p class="card-text">
           
@@ -23,13 +23,18 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item">Date: {{ trip.date_of_trip }}</li>
             <li class="list-group-item">Cost: ${{ trip.trip_cost }} </li>
-            <li class="list-group-item">Willing to Stop Along the Way: {{ trip.willing_to_stop }} </li>
-            <li class="list-group-item">{{ trip.max_passengers - trip.num_passengers }} seats left  </li>
+            <li class="list-group-item">Willing to Stop Along the Way: 
+              {% if trip.willing_to_stop == True %}
+                Yes
+              {% else %}
+                Nope, sorry!
+              {% endif %}
+            <li class="list-group-item">{{ trip.max_passengers - trip.num_passengers }} seat(s) left  </li>
           </ul>
           <br>
           <form action="/join-ride" method="POST">
-            <input type="submit" class="btn btn-primary" value="Join ride">
-            <input type="hidden" value={{ trip.trip_id }} name="trip">
+            <input type="submit" class="btn btn-success" value="Join ride">
+            <input type="hidden" class="btn btn-success" value={{ trip.trip_id }} name="trip">
         </form>
         </div>
       </div>

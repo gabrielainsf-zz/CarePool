@@ -25,7 +25,7 @@ function createCarbonFootprintOvertimeChart(trips) {
         datasets: [{
             label: "Total Carbon Saved",
             data: totalCarbonSavedArray,
-            borderColor: "#FAB000",
+            borderColor: "#FFB200",
             fill: false,
             steppedLine: true
         }],

@@ -20,51 +20,50 @@
 
     {% block content %}
     <br>
-    <h2>Welcome, {{ user_info.fname }} ~ </h2>
+    <h2>Welcome, {{ user_info.fname }} </h2>
     <br>
     <ul class="nav nav-tabs" role="tabpanel">
-        <li class="nav-item"><a data-toggle="tab" class="nav-link" aria-selected="true" href="#home" aria-controls="home" role="tab">Home</a></li>
+        <li class="nav-item"><a data-toggle="tab" class="nav-link" aria-selected="true" href="#impact" aria-controls="impact" role="tab">Impact</a></li>
         <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsDriver">I'm Driving</a></li>
         <li class="nav-item"><a data-toggle="tab" class="nav-link" href="#ridesAsPassenger">I'm Joining</a></li>
     </ul>
 
     <div class="tab-content" id="myTab">
-        <div id="home" class="tab-pane active">
+        <div id="impact" class="tab-pane active">
             <br><br>
-            <p>Hello</p>
-
-            <br>
             <div class="row">
                 <div class="col">
                     <canvas id="carbonFootprintOverTimeChart"></canvas>
                 </div>
-                <div class="col">
-                    <canvas id="carbonFootprintChart"></canvas> 
-                </div>
             </div>
             <br>
             <div class="row">
-                <div class="col">
-                  <div class="card">
-                      <div class="card-body">
-                        So far you have saved <div id="carbonReduced">number</div> liters of CO2.
-                      </div>
-                    </div>
+                <div class="col-9">
+                    <canvas id="carbonFootprintChart"></canvas> 
+                </div>
+                <div class="col-3">
+                <div class="card">
+                  <div class="card-body">
+                    So far you have saved <div id="carbonReduced">number</div> liters of CO2.
+                  </div>
+                </div>
                 </div>
             </div>
             <br>
         </div>
     
         <div id="ridesAsDriver" class="tab-pane fade">
-                <div id="todayTable"></div>
-                <div id="upcomingTable"> </div>
-                <div id="pastTable"></div>
+                <br>
+                <div id="todayTable" class="table-info"></div>
+                <div id="upcomingTable" class="table-info"> </div>
+                <div id="pastTable" class="table-info"></div>
         </div>
 
         <div id="ridesAsPassenger" class="tab-pane fade">
-            <div id="passengerTodayTable"></div>
-            <div id="passengerUpcomingTable"></div>
-            <div id="passengerPastTable"></div>
+            <br>
+            <div id="passengerTodayTable" class="table-info"></div>
+            <div id="passengerUpcomingTable" class="table-info"></div>
+            <div id="passengerPastTable" class="table-info"></div>
         </div>
     </div>
     </div>
@@ -84,8 +83,8 @@
                 <input type="text" class="form-control" name="message">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <input type="submit" class="btn btn-primary" value="Message">
+            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-message" value="Send">
             </form>
           </div>
         </div>
@@ -101,6 +100,13 @@
     }
 
     window.addEventListener("load", getTrips());
+
+    $(function(){
+        $('[data-toggle=popover]').popover({
+          html: true,
+          trigger: 'hover'
+    }) 
+    });
 
 
 </script>

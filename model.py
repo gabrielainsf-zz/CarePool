@@ -125,13 +125,15 @@ class UserTrip(db.Model):  # pragma: no cover
                 'dateOfTrip': datetime_str,
                 'userFirstName': self.user.fname,
                 'userProfileImg': self.user.user_profile_img,
+                'userBio': self.user.user_bio,
                 'origin': self.trip.origin,
                 'destination': self.trip.destination,
                 'displayDistance': self.trip.display_distance,
                 'distanceMeters': self.trip.distance_meters,
                 'numPassengers': self.trip.num_passengers,
                 'driverFirstName': self.trip.user.fname,
-                'driverProfileImg': self.trip.user.user_profile_img}
+                'driverProfileImg': self.trip.user.user_profile_img,
+                'driverBio': self.trip.user.user_bio}
 
 ##############################################################################
 # Helper functions

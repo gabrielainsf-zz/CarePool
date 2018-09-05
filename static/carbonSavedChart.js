@@ -25,13 +25,13 @@ function createCarbonFootprintChart(trips) {
 
     data = {
         datasets: [{
-            label: "Carbon Dioxide per Rideshare",
+            label: "Carbon Dioxide per CarePool",
             data: carbonDioxideCarpool,
-            backgroundColor: "#808000"
+            backgroundColor: "#6EA240"
         },{
             label: "Carbon Dioxide if Each Individual Drove",
             data: carbonDioxideIndividual,
-            backgroundColor: "#7A1607"
+            backgroundColor: "#3A4C85"
         }],
 
         labels: trip
