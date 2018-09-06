@@ -2,8 +2,9 @@
 
 {% block content %}
   <br>
-  <h3>Available rides from {{ origin }} to {{ destination }} by {{ date_desired }} :</h3><br>
+  <h3>We found these rides from {{ origin }} to {{ destination }} by {{ date_desired }} :</h3><br>
 
+  <div class="container-fluid">
     <div class="row">
     {% for trip in trips %}
       <div class="col">
@@ -43,6 +44,7 @@
     </div>
 
     {% endfor %}
+    </div>
   </div>
 
 {% endblock %}

@@ -2,18 +2,20 @@
 
 {% block content %}
   <br>
-  <h2>Sorry! There aren't rides to {{ destination }} by {{ date_desired }}, but here are some rides nearby: </h2><br>
+  <h3>Sorry, we didn't find any rides to {{ destination }} by {{ date_desired }}, but here are some nearby destinations: </h3><br>
 
+    <div class="container-fluid">
+      <div class="row">
     {% for trip_id, trip in drop_offs_nearby.items() %}
-
+      <div class="col">
       <div class="card" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="card-title">
-            <img src={{ trip.user.user_profile_img }} class="rounded-circle"> 
+          <h5 class="card-title" align="center">
+            <img src={{ trip.user.user_profile_img }} class="rounded-circle"><br><br> 
             {{ trip.user.fname }}
           </h5>
           <h6 class="card-subtitle mb-2 text-muted">
-          
+            {{ trip.user.user_bio }}
           </h6>
           <p class="card-text">
           
@@ -41,8 +43,10 @@
         </div>
       </div>
       <br>
-
+      </div>
     {% endfor %}
+      </div>
+    </div>
 
 
 {% endblock %}

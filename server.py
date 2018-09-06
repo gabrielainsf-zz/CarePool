@@ -217,6 +217,8 @@ def search_rides():
     date_desired = request.form['date']
     date_obj = datetime.strptime(date_desired, "%m/%d/%Y").date()
     today = date.today()
+    destination_list = destination.split(',')
+    destination_city = destination_list[0]
 
     # Query for origin and destination, if none, then nearby trips
     trips = Trip.query.filter(Trip.origin == origin,
@@ -248,7 +250,7 @@ def search_rides():
             else:
                 return render_template('nearby_search_results.html',
                                        origin=origin,
-                                       destination=destination,
+                                       destination=destination_city,
                                        date=date,
                                        date_desired=date_desired,
                                        date_obj=date_obj,
@@ -257,7 +259,7 @@ def search_rides():
         return render_template('search_results.html',
                                trips=trips,
                                origin=origin,
-                               destination=destination,
+                               destination=destination_city,
                                date_desired=date_desired,
                                date=date,
                                date_obj=date_obj)
