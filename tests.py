@@ -112,11 +112,11 @@ class FlaskTestsLoggedIn(unittest.TestCase):
     def test_add_ride(self):
         """Test that user ride gets added."""
         result = self.client.post('/add-ride',
-                                  data={"date_of_trip": "08-13-2018",
+                                  data={"date": "08-13-2018",
                                         "max_passengers": "2",
-                                        "num_passengers": "1",
-                                        "willing_to_stop": True,
-                                        "trip_cost": "15",
+                                        "time": "3:24 PM",
+                                        "newleg": True,
+                                        "cost": "15",
                                         "origin": "San Francisco, CA, USA",
                                         "destination": "San Diego, CA, USA"},
                                   follow_redirects=True)

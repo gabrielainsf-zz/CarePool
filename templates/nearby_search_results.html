@@ -2,7 +2,7 @@
 
 {% block content %}
   <br>
-  <h2>Sorry! There aren't rides to {{ destination }} on {{ date_desired }}, but here are some rides nearby: </h2><br>
+  <h2>Sorry! There aren't rides to {{ destination }} by {{ date_desired }}, but here are some rides nearby: </h2><br>
 
     {% for trip_id, trip in drop_offs_nearby.items() %}
 

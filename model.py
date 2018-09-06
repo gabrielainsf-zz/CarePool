@@ -175,6 +175,7 @@ def example_data():  # pragma: no cover
                 trip_cost="10",
                 user_id="1",
                 origin="San Francisco",
+                time="5:00 PM",
                 destination="Los Angeles",
                 distance_meters="15422",
                 display_distance="13 mi")
