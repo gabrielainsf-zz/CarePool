@@ -31,6 +31,7 @@ def distance_matrix_filter(origin, destination, trips):
               .format(r.status_code))
     else:
         response_dict = json.loads(r.text)
+
         for offset, trip in enumerate(trips):
             cell = response_dict['rows'][0]['elements'][offset]
             if cell['status'] == 'OK':
@@ -48,10 +49,4 @@ def distance_matrix_filter(origin, destination, trips):
         trip = trips_by_id[trip_idx]
         drop_offs_nearby[trip_idx] = trip
 
-
     return drop_offs_nearby
-
-def filter_by_distance():
-    """Filter the results by distance and returns trips less than 45 miles."""
-
-

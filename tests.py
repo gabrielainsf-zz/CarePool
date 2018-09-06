@@ -97,11 +97,15 @@ class FlaskTestsLoggedIn(unittest.TestCase):
                                   follow_redirects=True)
         self.assertIn(b"Welcome", result.data)
 
-    # def test_join_ride(self):
-    #     """Test that user is able to join ride."""
-    #     result = self.client.post('/join-ride',
-    #                               data={},
-    #                               follow_redirects=True)
+    def test_join_ride(self):
+        """Test that user is able to join ride."""
+        result = self.client.post('/join-ride',
+                                  data={'trip': '32'},
+                                  follow_redirects=True)
+
+        self.assertIn(b"Welcome", result.data)
+
+
 
     def test_add_ride_page(self):
         """Test that add ride page loads if user is logged in."""

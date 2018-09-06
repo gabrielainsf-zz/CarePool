@@ -93,10 +93,6 @@ def trips():
         for trip in trips_dict_list:
             trips_by_date[trip['dateOfTrip']] = trip
 
-        # for trip, trip2 in zip(trips_pass_dict, trips_dict_list):
-        #     trips_by_date[trip['dateOfTrip']] = trip
-        #     trips_by_date[trip2['dateOfTrip']] = trip2
-
         return jsonify({'trips': trips_dict_list,
                         'tripsAsPassenger': trips_pass_dict,
                         'tripsByDate': trips_by_date})
