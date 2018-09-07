@@ -38,7 +38,7 @@ function createTripTable(trips, title, elementID) {
 
                     table += "<div class='row'>"
                                     + "<div class='col-sm'>"
-                                    + `<img src=${passengerProfileImg} class="passenger-img rounded-circle" id="popover" data-placement="right" data-toggle="popover" tabindex="0" data-trigger="hover" data-content="<strong>${passengerFirstName}</strong>  ${passengerBio}">`
+                                    + `<img src=${passengerProfileImg} class="passenger-img rounded-circle" id="popover" data-placement="left" data-toggle="popover" tabindex="0" data-trigger="hover" data-content="<strong>${passengerFirstName}</strong>  ${passengerBio}">`
                                     + "<br>"
                                     + '<button type="button" class="badge btn-custom" data-toggle="modal" data-target="#exampleModalCenter">Message</button>'
                                     + "</div>"

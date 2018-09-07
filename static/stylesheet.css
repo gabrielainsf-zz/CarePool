@@ -58,3 +58,7 @@ body {
 th, td {
     text-align: center;
 }
+
+.card {
+    margin: 8px;
+}
