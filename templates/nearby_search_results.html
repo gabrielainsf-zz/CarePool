@@ -8,20 +8,18 @@
       <div class="row">
     {% for trip_id, trip in drop_offs_nearby.items() %}
 
-      <div class="card" style="width: 18rem;">
+      <div class="card" style="width: 18rem;" align="center">
         <div class="card-body">
-          <h5 class="card-title" align="center">
-            <img src={{ trip.user.user_profile_img }} class="rounded-circle"><br><br> 
+          <h5 class="card-title">
+            <img src={{ trip.user.user_profile_img }} class="rounded-circle search-img"><br>
             {{ trip.user.fname }}
           </h5>
           <h6 class="card-subtitle mb-2 text-muted">
             {{ trip.user.user_bio }}
           </h6>
           <p class="card-text">
-          
-
           </p>
-          <ul class="list-group list-group-flush">
+          <ul class="list-group list-group-flush" align="left">
             <li class="list-group-item">To: {{ trip.destination }}</li>
             <li class="list-group-item">Date: {{ trip.date_of_trip }}</li>
             <li class="list-group-item">Time: {{ trip.time }}</li>
@@ -33,7 +31,7 @@
                 Nope, sorry!
               {% endif %}
             </li>
-            <li class="list-group-item">{{ trip.max_passengers - trip.num_passengers }} seats left  </li>
+            <li class="list-group-item">{{ trip.max_passengers - trip.num_passengers }} seat(s) left  </li>
           </ul>
           <br>
           <form action="/join-ride" method="POST">

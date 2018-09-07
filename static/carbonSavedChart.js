@@ -25,11 +25,11 @@ function createCarbonFootprintChart(trips) {
 
     data = {
         datasets: [{
-            label: "Carbon Dioxide per CarePool",
+            label: "CO2 Emitted per CarePool",
             data: carbonDioxideCarpool,
             backgroundColor: "#6EA240"
         },{
-            label: "Carbon Dioxide if Each Individual Drove",
+            label: "CO2 Emitted if Each Individual Drove",
             data: carbonDioxideIndividual,
             backgroundColor: "#3A4C85"
         }],
@@ -44,7 +44,7 @@ function createCarbonFootprintChart(trips) {
             legend: { display: true },
             title: {
                 display: true,
-                text: 'Liters of Carbon Dioxide Emitted Comparison'
+                text: 'Liters of CO2 Emitted Comparison'
             },
             scales: {
               xAxes: [{

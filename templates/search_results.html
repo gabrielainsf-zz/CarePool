@@ -7,21 +7,20 @@
   <div class="container-fluid">
     <div class="row">
     {% for trip in trips %}
-      <div class="col">
-      <div class="card" style="width: 18rem;">
+      <div class="card" style="width: 18rem;" align="center">
         <div class="card-body">
-          <h3 class="card-title" align="center">
-            <img src={{ trip.user.user_profile_img }} class="rounded-circle"><br><br> 
+          <h3 class="card-title">
+            <img src={{ trip.user.user_profile_img }} class="rounded-circle search-img"><br>
             {{ trip.user.fname }}
           </h3>
-          <h6 class="card-subtitle mb-2 text-muted" align="center">
+          <h6 class="card-subtitle mb-2 text-muted">
             {{ trip.user.user_bio }}
           </h6>
           <p class="card-text">
           
 
           </p>
-          <ul class="list-group list-group-flush">
+          <ul class="list-group list-group-flush" align="left">
             <li class="list-group-item">Date: {{ trip.date_of_trip }}</li>
             <li class="list-group-item">Time: {{ trip.time }}</li>
             <li class="list-group-item">Cost: ${{ trip.trip_cost }} </li>
@@ -41,7 +40,6 @@
         </form>
         </div>
       </div>
-    </div>
 
     {% endfor %}
     </div>
