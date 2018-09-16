@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 
     {% block head %}
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="\favicon.ico" type="image/x-icon" />
     {% endblock %}
 </head>
 <body>
@@ -38,7 +40,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="/edit-profile">Edit profile</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="/logout">Log Out</a>

@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
+
+
     {% block head%}
+
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -15,7 +18,7 @@
     <script src="/static/searchCity.js"></script>
     <script src="/static/userAsDriverTable.js"></script>
     <script src="/static/userAsPassengerTable.js"></script>
-
+    <title>Home</title>
     {% endblock %}
 
     {% block content %}
@@ -40,23 +43,24 @@
                 </div>
             </div>
             <br>
-            <div class="row">
-                <div class="col-3">
-                <div class="card">
-                  <div class="card-body">
-                    So far you have saved <div id="carbonReduced">number</div> liters of CO2.
-                  </div>
+                <div id="carbon-reduced">
+                    <div class="row">
+
+                    So far you have saved  
+                        <span id="carbonReduced">number</span> liters of CO2.
+                    </div>
                 </div>
-                </div>
-            </div>
-            <br>
         </div>
     
         <div id="ridesAsDriver" class="tab-pane fade">
-                <br>
+
                 <div id="todayTable" class="table-info"></div>
+
+
                 <div id="upcomingTable" class="table-info"> </div>
+
                 <div id="pastTable" class="table-info"></div>
+    
         </div>
 
         <div id="ridesAsPassenger" class="tab-pane fade">
@@ -101,11 +105,11 @@
 
     window.addEventListener("load", getTrips());
 
-    $(function(){
+
+    $(document).ready(function(){
         $('[data-toggle=popover]').popover({
           html: true,
-          trigger: 'hover'
-    }) 
+        }) 
     });
 
 

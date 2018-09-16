@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% block title %}Search Results{% endblock %}
 {% block content %}
   <br>
   <h3>Sorry, we didn't find any rides to {{ destination }} by {{ date_desired }}, but here are some nearby destinations: </h3><br>
@@ -21,6 +22,7 @@
           </p>
           <ul class="list-group list-group-flush" align="left">
             <li class="list-group-item">To: {{ trip.destination }}</li>
+            <li class="list-group-item">Distance: {{ trip.display_distance }}</li>
             <li class="list-group-item">Date: {{ trip.date_of_trip }}</li>
             <li class="list-group-item">Time: {{ trip.time }}</li>
             <li class="list-group-item">Cost: ${{ trip.trip_cost }} </li>

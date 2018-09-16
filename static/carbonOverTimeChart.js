@@ -44,7 +44,7 @@ function createCarbonFootprintOvertimeChart(trips) {
             }
         }
     });
-
-        document.getElementById("carbonReduced").innerHTML = totalCarbonSaved
+        roundedTotalCarbonReduced = Math.floor(totalCarbonSaved)
+        document.getElementById("carbonReduced").innerHTML = roundedTotalCarbonReduced
 }
 

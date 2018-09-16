@@ -3,10 +3,17 @@
 
 }*/
 
-h3, h2, h1, h4  {
+h2, h1, h4  {
     font-family: 'Open Sans', sans-serif;
     margin-left: .5rem;
     color: #231651;
+}
+
+h3 {
+    font-family: 'Open Sans', sans-serif;
+    margin-left: .5rem;
+    color: #231651;
+    font-size: 1.35em;
 }
 
 body {
@@ -17,6 +24,11 @@ body {
     background-color: white;
     color: #231651;
     border-color: #231651;
+}
+
+.btn-message:hover {
+    background-color: #231651;
+    color: white;
 }
 
 .nav-link {
@@ -51,6 +63,12 @@ body {
     margin: 8px;
 }
 
+.btn-custom:hover {
+    background-color: white;
+    color: #231651;
+
+}
+
 .fa-2x {
     color: #6EA240;
 }
@@ -65,4 +83,29 @@ th, td {
 
 .search-img {
     margin-bottom: 8px;
+}
+
+#input-box {
+    padding: 1px;
+    border-radius: 0px;
+}
+
+.text-muted {
+    height: 30px;
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center; /* align vertical */
+    padding-top: 0.5em;
+}
+
+#carbon-reduced {
+    border: 1px solid rgba(0,0,0,.125);
+    padding: 1.25rem;
+    width: 950px;
+    text-align: center;
+}
+
+#carbonReduced {
+    padding-left: 0.2em;
+    padding-right: 0.2em;
 }

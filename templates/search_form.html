@@ -1,44 +1,39 @@
 {% extends 'base.html' %}
 
-  {% block head %}
-      <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
-      <script src="https://maps.googleapis.com/maps/api/js?key={{ key }}&v=3.exp&libraries=places"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 
-      <script src="/static/searchCity.js"></script>
-      <script src="/static/datePicker.js"></script>
+{% block head %}
+    <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ key }}&v=3.exp&libraries=places"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-      <style>
-        .date {
-          -webkit-box-shadow: none;
-          -moz-box-shadow: none;
-          box-shadow: 0px 0px 0px !important;
-          }
-      </style>
 
-  {% endblock %}
-    
-  {% block content %}
+    <script src="/static/searchCity.js"></script>
+    <script src="/static/datePicker.js"></script>
+    <title>Search Rides</title>
+    <link rel="shortcut icon" href="\favicon.ico" type="image/x-icon" />
+{% endblock %}
+  
+{% block content %}
 
-    <body onload="initialize()">
+  <body onload="initialize()">
 
-      <br><br><br>
-      <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-          <h1 class="display-4">Search rides</h1>
-          <p class="lead">
-            <div id="locationField">
-              <form action="/search-rides" method=POST>
-                <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting location" required> 
-                <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination" required>
-                <input class="datepicker date" id="date" type="text" name="date" placeholder="Date" required>
-                <input type="submit" class="btn btn-success">
-              </form>
-            </div>
-          </p>
-        </div>
+    <br><br><br>
+    <div class="jumbotron jumbotron-fluid">
+      <div class="container">
+        <h1 class="display-4">Search rides</h1>
+        <p class="lead">
+          <div id="locationField">
+            <form action="/search-rides" method=POST>
+              <input id="origin" class="query" type="text" name="origin" placeholder="Enter starting location" required> 
+              <input id="destination" class="query" type="text" name="destination" placeholder="Enter destination" required>
+              <input class="datepicker" id="input-box" type="text" name="date" placeholder="Date" required>
+              <input type="submit" class="btn btn-success">
+            </form>
+          </div>
+        </p>
       </div>
+    </div>
 
-    </body>
-  {% endblock %}
+  </body>
+{% endblock %}

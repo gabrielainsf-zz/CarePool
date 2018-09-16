@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+  {% block title %}Add Ride{% endblock %}
+
   {% block head %}
       <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
       <script src="https://maps.googleapis.com/maps/api/js?key={{ key }}&v=3.exp&libraries=places"></script>
@@ -10,11 +12,8 @@
 
       <script src="/static/searchCity.js"></script>
       <script src="/static/datePicker.js"></script>
-    
-
+      <title>Add Ride</title>
   {% endblock %}
-
-
 
 
   {% block content %}
@@ -33,7 +32,7 @@
             
           
             Date of trip: 
-              <input class="datepicker" type="text" name="date" id="inputsm" required>
+              <input class="datepicker" type="text" name="date" id="input-box" required>
             Time:
               <input class="timepicker" type="text" name="time" required>
        

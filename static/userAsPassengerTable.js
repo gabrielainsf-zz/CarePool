@@ -23,7 +23,7 @@
                 table += "<td>" + trips[i]["time"]+"</td>";
                 table += "<td>" + trips[i]["origin"]+"</td>";
                 table += "<td>" + trips[i]["destination"]+"</td>";
-                table += "<td>" + `<img src="${driverProfileImg}" class="rounded-circle passenger-img" id="popover" data-toggle="popover" data-placement="right" tabindex="0" data-trigger="hover" data-content="<strong>${driverName}</strong>  ${driverBio}">`
+                table += "<td>" + `<img src="${driverProfileImg}" class="rounded-circle passenger-img" id="popover" data-toggle="popover" data-placement="left" tabindex="0" data-trigger="hover" data-content="<strong>${driverName}</strong>  ${driverBio}">`
                                     + "<br>"
                                     + "<button type='button' class='badge btn-custom' data-toggle='modal' data-target='#exampleModalCenter'>Message</button>"
                                 + "</td>";
