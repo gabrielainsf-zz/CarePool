@@ -10,7 +10,7 @@ Python, JavaScript, jQuery, AJAX, Bootstrap, ChartJS, Jinja, HTML/CSS, PostGresQ
 
 ## APIs Used
 
-Google Places APi, Google Distance Matrix API, Twilio API
+Google Places API, Google Distance Matrix API, Twilio API
 
 ## Demo
 Watch the demo [here](https://vimeo.com/290716122)
