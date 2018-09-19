@@ -11,3 +11,5 @@ Python, JavaScript, jQuery, AJAX, Bootstrap, ChartJS, Jinja, HTML/CSS, PostGresQ
 ## APIs Used
 
 Google Places APi, Google Distance Matrix API, Twilio API
+
+![LandingPage](static/Landing Page.png)
